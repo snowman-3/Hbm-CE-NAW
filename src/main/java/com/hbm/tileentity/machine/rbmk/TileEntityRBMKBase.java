@@ -82,6 +82,13 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
     private int prevWater;
     private int prevSteam;
 
+    @SideOnly(Side.CLIENT)
+    private static long lastDODDUpdate = 0;
+    @SideOnly(Side.CLIENT)
+    private static List<String> cachedDODDLines = new ArrayList<>();
+    @SideOnly(Side.CLIENT)
+    private static BlockPos lastDODDPos = null;
+
 	public boolean hasLid() {
 
 		if(!isLidRemovable())
@@ -115,7 +122,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 	public boolean shouldUpdate() {
 		return true;
 	}
-	
+
 	public int trackingRange() {
 		return 15;
 	}
@@ -130,7 +137,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
             coolPassively();
             jump();
 
-            detectAndSendChanges();
+            networkPackNT(trackingRange());
         }
     }
 
@@ -145,7 +152,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 					double heightLimit = (this.heat-MachineConfig.rbmkJumpTemp)*0.002D;
 
 					this.jumpheight = this.jumpheight + change;
-					
+
 					if(this.jumpheight > heightLimit){
 						this.jumpheight = heightLimit;
 						this.falling = true;
@@ -167,7 +174,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 		}
 	}
 
-	
+
 	/**
 	 * The ReaSim boiler dial causes all RBMK parts to behave like boilers
 	 */
@@ -189,91 +196,113 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 		this.reasimSteam += processedWater;
 		this.heat -= processedWater * heatConsumption;
 	}
-	
+
 	public static final ForgeDirection[] heatDirs = new ForgeDirection[] {
 			ForgeDirection.NORTH,
 			ForgeDirection.EAST,
 			ForgeDirection.SOUTH,
 			ForgeDirection.WEST
 	};
-	
+
 	protected TileEntityRBMKBase[] neighbourCache = new TileEntityRBMKBase[4];
-	
+
 	/**
 	 * Moves heat to neighboring parts, if possible, in a relatively fair manner
 	 */
-	private void moveHeat() {
+    private void moveHeat() {
 
-		boolean reasim = RBMKDials.getReasimBoilers(world);
+        boolean reasim = RBMKDials.getReasimBoilers(world);
 
-		List<TileEntityRBMKBase> rec = new ArrayList<>();
-		rec.add(this);
-		double heatTot = this.heat;
-		int waterTot = this.reasimWater;
-		int steamTot = this.reasimSteam;
+        // 1. Start totals with "this" block data (no ArrayList needed)
+        double heatTot = this.heat;
+        int waterTot = this.reasimWater;
+        int steamTot = this.reasimSteam;
+        int members = 1; // "1" includes self
 
-		int index = 0;
-		for(ForgeDirection dir : heatDirs) {
+        // 2. Update Cache & Summation
+        int index = 0;
+        for(ForgeDirection dir : heatDirs) {
 
-			if(neighbourCache[index] != null && neighbourCache[index].isInvalid())
-				neighbourCache[index] = null;
+            // Validation
+            if(neighbourCache[index] != null && neighbourCache[index].isInvalid())
+                neighbourCache[index] = null;
 
-			if(neighbourCache[index] == null) {
-				TileEntity te = world.getTileEntity(getPos().add(dir.offsetX, 0, dir.offsetZ));
+            // Loading (Lazy)
+            if(neighbourCache[index] == null) {
+                TileEntity te = world.getTileEntity(getPos().add(dir.offsetX, 0, dir.offsetZ));
 
-				if(te instanceof TileEntityRBMKBase base) {
+                if(te instanceof TileEntityRBMKBase base) {
                     neighbourCache[index] = base;
-				}
-			}
+                }
+            }
 
-			index++;
-		}
+            // Summation directly from array
+            TileEntityRBMKBase neighbor = neighbourCache[index];
+            if (neighbor != null) {
+                members++;
+                heatTot += neighbor.heat;
+                if (reasim) {
+                    waterTot += neighbor.reasimWater;
+                    steamTot += neighbor.reasimSteam;
+                }
+            }
+            index++;
+        }
 
-		for(TileEntityRBMKBase base : neighbourCache) {
+        // 3. Distribution
+        double stepSize = RBMKDials.getColumnHeatFlow(world);
 
-			if(base != null) {
-				rec.add(base);
-				heatTot += base.heat;
-				if(reasim) {
-					waterTot += base.reasimWater;
-					steamTot += base.reasimSteam;
-				}
-			}
-		}
+        if(members > 1) {
 
-		int members = rec.size();
-		double stepSize = RBMKDials.getColumnHeatFlow(world);
+            double targetHeat = heatTot / (double)members;
 
-		if(members > 1) {
+            int tWater = 0;
+            int rWater = 0;
+            int tSteam = 0;
+            int rSteam = 0;
 
-			double targetHeat = heatTot / (double)members;
+            if(reasim) {
+                tWater = waterTot / members;
+                rWater = waterTot % members;
+                tSteam = steamTot / members;
+                rSteam = steamTot % members;
+            }
 
-			int tWater = waterTot / members;
-			int rWater = waterTot % members;
-			int tSteam = steamTot / members;
-			int rSteam = steamTot % members;
+            // Apply changes to neighbors
+            for(TileEntityRBMKBase neighbor : neighbourCache) {
+                if(neighbor != null) {
+                    double delta = targetHeat - neighbor.heat;
+                    neighbor.heat += delta * stepSize;
 
-			for(TileEntityRBMKBase rbmk : rec) {
-				double delta = targetHeat - rbmk.heat;
-				rbmk.heat += delta * stepSize;
+                    if(reasim) {
+                        neighbor.reasimWater = tWater;
+                        neighbor.reasimSteam = tSteam;
 
-				//set to the averages, rounded down
-				if(reasim) {
-					rbmk.reasimWater = tWater;
-					rbmk.reasimSteam = tSteam;
-				}
-			}
+                        // Distribute remainder slightly to avoid voiding fluids
+                        if (rWater > 0) { neighbor.reasimWater++; rWater--; }
+                        if (rSteam > 0) { neighbor.reasimSteam++; rSteam--; }
+                    }
+                    neighbor.markDirty();
+                }
+            }
 
-			//add the modulo to make up for the losses coming from rounding
-			if(reasim) {
-				this.reasimWater += rWater;
-				this.reasimSteam += rSteam;
-			}
+            // Apply changes to self
+            double delta = targetHeat - this.heat;
+            this.heat += delta * stepSize;
 
-			this.markDirty();
-		}
-	}
-	
+            if(reasim) {
+                this.reasimWater = tWater;
+                this.reasimSteam = tSteam;
+
+                // Self gets the last of the remainder
+                if (rWater > 0) { this.reasimWater += rWater; }
+                if (rSteam > 0) { this.reasimSteam += rSteam; }
+            }
+
+            this.markDirty();
+        }
+    }
+
 	private void coolPassively() {
 
 		if(TomSaveData.forWorld(world).fire > 1e-5) {
@@ -292,9 +321,9 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 	public RBMKType getRBMKType() {
 		return RBMKType.OTHER;
 	}
-	
+
 	protected static boolean diag = false;
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 
@@ -306,7 +335,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 		this.reasimWater = nbt.getInteger("realSimWater");
 		this.reasimSteam = nbt.getInteger("realSimSteam");
 	}
-	
+
 	@Override
 	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
@@ -333,63 +362,72 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 		this.reasimWater = buf.readInt();
 		this.reasimSteam = buf.readInt();
 	}
-	
+
 	public void getDiagData(NBTTagCompound nbt) {
 		diag = true;
 		this.writeToNBT(nbt);
 		diag = false;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static void diagnosticPrintHook(RenderGameOverlayEvent.Pre event) {
+    @SideOnly(Side.CLIENT)
+    public static void diagnosticPrintHook(RenderGameOverlayEvent.Pre event) {
 
-		Minecraft mc = Minecraft.getMinecraft();
-		World world = mc.world;
-		RayTraceResult mop = mc.objectMouseOver;
-		ScaledResolution resolution = event.getResolution();
+        Minecraft mc = Minecraft.getMinecraft();
+        World world = mc.world;
+        RayTraceResult mop = mc.objectMouseOver;
+        ScaledResolution resolution = event.getResolution();
 
-		if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK && world.getBlockState(mop.getBlockPos()).getBlock() instanceof RBMKBase rbmk) {
-			int[] pos = rbmk.findCore(world, mop.getBlockPos().getX(), mop.getBlockPos().getY(), mop.getBlockPos().getZ());
+        if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK && world.getBlockState(mop.getBlockPos()).getBlock() instanceof RBMKBase rbmk) {
+            int[] pos = rbmk.findCore(world, mop.getBlockPos().getX(), mop.getBlockPos().getY(), mop.getBlockPos().getZ());
+            if (pos == null) return;
 
-			if (pos == null)
-				return;
+            BlockPos currentPos = new BlockPos(pos[0], pos[1], pos[2]);
+            long currentTime = System.currentTimeMillis();
 
-			TileEntityRBMKBase te = (TileEntityRBMKBase) world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
-			if (te == null) return;
-			NBTTagCompound flush = new NBTTagCompound();
-			te.getDiagData(flush);
-			Set<String> keys = flush.getKeySet();
+            if (currentTime - lastDODDUpdate > 50 || !currentPos.equals(lastDODDPos)) {
+                lastDODDUpdate = currentTime;
+                lastDODDPos = currentPos;
 
-			GlStateManager.pushMatrix();
-			float scale = 1f; //Was there a reason this was 0.5 mov?
-			GlStateManager.scale(scale, scale, 1.0f);
-			int pX = resolution.getScaledWidth() / 2 + 8;
-			int pZ = resolution.getScaledHeight() / 2;
+                TileEntityRBMKBase te = (TileEntityRBMKBase) world.getTileEntity(currentPos);
+                if (te == null) return;
 
-			mc.fontRenderer.drawString(title, (int)(pX / scale) + 1, (int)((pZ - 19) / scale), 0x006000);
-			mc.fontRenderer.drawString(title, (int)(pX / scale), (int)((pZ - 20) / scale), 0x00FF00);
+                NBTTagCompound flush = new NBTTagCompound();
+                te.getDiagData(flush);
+                Set<String> keys = flush.getKeySet();
 
-			mc.fontRenderer.drawString(I18nUtil.resolveKey(rbmk.getTranslationKey() + ".name"), (int)(pX / scale) + 1, (int)((pZ - 9) / scale), 0x606000);
-			mc.fontRenderer.drawString(I18nUtil.resolveKey(rbmk.getTranslationKey() + ".name"), (int)(pX / scale), (int)((pZ - 10) / scale), 0xffff00);
+                String[] ents = keys.toArray(new String[0]);
+                Arrays.sort(ents);
 
-			String[] ents = new String[keys.size()];
-			keys.toArray(ents);
-			Arrays.sort(ents);
-			int listPz = pZ;
-			for (String key : ents) {
+                cachedDODDLines.clear();
+                for (String key : ents) {
+                    if (!exceptions.contains(key)) {
+                        cachedDODDLines.add(key + ": " + flush.getTag(key));
+                    }
+                }
+            }
 
-				if (exceptions.contains(key))
-					continue;
-				mc.fontRenderer.drawString(key + ": " + flush.getTag(key), (int)(pX / scale), (int)(listPz / scale), 0xFFFFFF);
-				listPz += (int) (10 * scale);
-			}
+            GlStateManager.pushMatrix();
+            float scale = 1f;
+            GlStateManager.scale(scale, scale, 1.0f);
+            int pX = resolution.getScaledWidth() / 2 + 8;
+            int pZ = resolution.getScaledHeight() / 2;
 
-			GlStateManager.disableBlend();
+            mc.fontRenderer.drawString(title, (int)(pX / scale) + 1, (int)((pZ - 19) / scale), 0x006000);
+            mc.fontRenderer.drawString(title, (int)(pX / scale), (int)((pZ - 20) / scale), 0x00FF00);
+            mc.fontRenderer.drawString(I18nUtil.resolveKey(rbmk.getTranslationKey() + ".name"), (int)(pX / scale) + 1, (int)((pZ - 9) / scale), 0x606000);
+            mc.fontRenderer.drawString(I18nUtil.resolveKey(rbmk.getTranslationKey() + ".name"), (int)(pX / scale), (int)((pZ - 10) / scale), 0xffff00);
 
-			GlStateManager.popMatrix();
-			Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
-		}
-	}
+            int listPz = pZ;
+            for (String line : cachedDODDLines) {
+                mc.fontRenderer.drawString(line, (int)(pX / scale), (int)(listPz / scale), 0xFFFFFF);
+                listPz += 10;
+            }
+
+            GlStateManager.disableBlend();
+            GlStateManager.popMatrix();
+            mc.renderEngine.bindTexture(Gui.ICONS);
+        }
+    }
 
 	public void onOverheat() {
 
@@ -397,7 +435,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 			world.setBlockState(pos.up(i), Blocks.LAVA.getDefaultState());
 		}
 	}
-	
+
 	public void onMelt(int reduce) {
 
 		standardMelt(reduce);
@@ -405,7 +443,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 		if(this.getBlockMetadata() == RBMKBase.DIR_NORMAL_LID.ordinal() + RBMKBase.offset)
 			spawnDebris(DebrisType.LID);
 	}
-	
+
 	protected void standardMelt(int reduce) {
 
 		int h = RBMKDials.getColumnHeight(world);
@@ -431,7 +469,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 			world.notifyBlockUpdate(pos.up(i), state, state, 3);
 		}
 	}
-	
+
 	protected void spawnDebris(DebrisType type) {
 
 		EntityRBMKDebris debris = new EntityRBMKDebris(world, pos.getX() + 0.5D, pos.getY() + 4D, pos.getZ() + 0.5D, type);
@@ -447,10 +485,10 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 
 		world.spawnEntity(debris);
 	}
-	
+
 	public static HashSet<TileEntityRBMKBase> columns = new HashSet<>();
 	public static HashSet<FluidNetMK2> pipes = new HashSet<>();
-	
+
 	//assumes that !world.isRemote
 	public void meltdown() {
 		RBMKBase.dropLids = false;
@@ -580,7 +618,7 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 		RBMKBase.dropLids = true;
 		RBMKBase.digamma = false;
 	}
-	
+
 	//Family and Friends
     // iterative BFS version to prevent stack overflow
     private void getFF(int x, int y, int z) {
@@ -614,21 +652,21 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
             }
         }
     }
-	
+
 	public boolean isModerated() {
 		return false;
 	}
-	
+
 	public abstract ColumnType getConsoleType();
-	
+
 	public NBTTagCompound getNBTForConsole() {
 		return null;
 	}
-	
+
 	public static List<String> getFancyStats(NBTTagCompound nbt) {
 		return null;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 17, pos.getZ() + 1);
@@ -680,36 +718,4 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 	public World getControlWorld() {
 		return getWorld();
 	}
-
-    private void detectAndSendChanges() {
-
-        // Force update every 20 ticks (1 second) to keep GUI synced and connection alive
-        // Using hashCode staggers updates so all RBMK columns don't update on the exact same tick
-        boolean forceUpdate = (world.getTotalWorldTime() + this.pos.hashCode()) % 20 == 0;
-
-        boolean changed = false;
-
-        // Check Heat (using simple check to avoid spamming on micro-fluctuations)
-        if (Math.abs(prevHeat - heat) > 0.1D) {
-            prevHeat = heat;
-            changed = true;
-        }
-
-        // Check Water
-        if (prevWater != reasimWater) {
-            prevWater = reasimWater;
-            changed = true;
-        }
-
-        // Check Steam
-        if (prevSteam != reasimSteam) {
-            prevSteam = reasimSteam;
-            changed = true;
-        }
-
-        // Send packet only if something changed significantly OR it's time for a forced sync
-        if (changed || forceUpdate) {
-            networkPackNT(trackingRange());
-        }
-    }
 }
