@@ -31,30 +31,25 @@ public class CableBoxBakedModel extends AbstractBakedModel {
         int m = meta % 5;
         int mask = (pX ? 32 : 0) + (nX ? 16 : 0) + (pY ? 8 : 0) + (nY ? 4 : 0) + (pZ ? 2 : 0) + (nZ ? 1 : 0);
         int count = Integer.bitCount(mask);
-
-        TextureAtlasSprite[] straight = PowerCableBox.iconStraight;
+        TextureAtlasSprite straight = PowerCableBox.iconStraight;
         TextureAtlasSprite[] end = PowerCableBox.iconEnd;
-        TextureAtlasSprite[] curveTL = PowerCableBox.iconCurveTL;
-        TextureAtlasSprite[] curveTR = PowerCableBox.iconCurveTR;
-        TextureAtlasSprite[] curveBL = PowerCableBox.iconCurveBL;
-        TextureAtlasSprite[] curveBR = PowerCableBox.iconCurveBR;
-        TextureAtlasSprite[] junction = PowerCableBox.iconJunction;
-
-
-        if ((mask & 0b001111) == 0 && mask > 0) return (side == 4 || side == 5) ? end[m] : straight[m];
-        if ((mask & 0b111100) == 0 && mask > 0) return (side == 2 || side == 3) ? end[m] : straight[m];
-        if ((mask & 0b110011) == 0 && mask > 0) return (side == 0 || side == 1) ? end[m] : straight[m];
+        TextureAtlasSprite curveTL = PowerCableBox.iconCurveTL;
+        TextureAtlasSprite curveTR = PowerCableBox.iconCurveTR;
+        TextureAtlasSprite curveBL = PowerCableBox.iconCurveBL;
+        TextureAtlasSprite curveBR = PowerCableBox.iconCurveBR;
+        TextureAtlasSprite junction = PowerCableBox.iconJunction;
+        if ((mask & 0b001111) == 0 && mask > 0) return (side == 4 || side == 5) ? end[m] : straight;
+        if ((mask & 0b111100) == 0 && mask > 0) return (side == 2 || side == 3) ? end[m] : straight;
+        if ((mask & 0b110011) == 0 && mask > 0) return (side == 0 || side == 1) ? end[m] : straight;
 
         if (count == 2) {
-            if ((nY && pZ) || (pY && nZ)) return side == 4 ? curveTR[m] : curveTL[m];
-            if ((nY && nZ) || (pY && pZ)) return side == 5 ? curveTR[m] : curveTL[m];
-            if ((nY && pX) || (pY && nX)) return side == 3 ? curveBR[m] : curveBL[m];
-            if ((nX && nZ) || (pX && pZ)) return side == 2 ? curveBR[m] : curveBL[m];
-
-            return straight[m];
+            if ((nY && pZ) || (pY && nZ)) return side == 4 ? curveTR : curveTL;
+            if ((nY && nZ) || (pY && pZ)) return side == 5 ? curveTR : curveTL;
+            if ((nY && pX) || (pY && nX)) return side == 3 ? curveBR : curveBL;
+            if ((nX && nZ) || (pX && pZ)) return side == 2 ? curveBR : curveBL;
+            return straight;
         }
-
-        return junction[Math.min(m, junction.length - 1)];
+        return junction;
     }
 
     @Override
@@ -84,8 +79,6 @@ public class CableBoxBakedModel extends AbstractBakedModel {
         int sizeLevel = Math.min(useMeta, 4);
         float lower = 0.125f + sizeLevel * 0.0625f;
         float upper = 0.875f - sizeLevel * 0.0625f;
-        float jLower = 0.0625f + sizeLevel * 0.0625f;
-        float jUpper = 0.9375f - sizeLevel * 0.0625f;
 
         List<float[]> boundsList = new ArrayList<>();
 
@@ -95,7 +88,7 @@ public class CableBoxBakedModel extends AbstractBakedModel {
         if (pZ || nZ) boundsList.add(new float[]{lower, lower, 0, upper, upper, 1});
 
         int connectionCount = (pX ? 1 : 0) + (nX ? 1 : 0) + (pY ? 1 : 0) + (nY ? 1 : 0) + (pZ ? 1 : 0) + (nZ ? 1 : 0);
-        if (connectionCount > 1) boundsList.add(new float[]{jLower, jLower, jLower, jUpper, jUpper, jUpper});
+        if (connectionCount > 1) boundsList.add(new float[]{lower, lower, lower, upper, upper, upper});
 
         FaceBakery faceBakery = new FaceBakery();
 
