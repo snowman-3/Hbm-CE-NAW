@@ -14,9 +14,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import java.nio.FloatBuffer;
 
+@SideOnly(Side.CLIENT)
 public class ParticleHeatDistortion extends Particle {
 
 	public float heatAmount;

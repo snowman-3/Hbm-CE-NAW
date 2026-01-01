@@ -34,22 +34,18 @@ public final class FMLNetworkHook {
     private FMLNetworkHook() {
     }
 
-    private static void safeRelease(ByteBuf b) {
-        if (b != null && b.refCnt() > 0) b.release();
-    }
-
     private static void releaseCustomPayloadData(Object pkt) {
         if (pkt instanceof SPacketCustomPayload sp) {
             Object o = U.getReference(sp, SP_DATA_OFF);
             if (o != null) {
                 U.putReference(sp, SP_DATA_OFF, null);
-                safeRelease((ByteBuf) o); // PacketBuffer extends ByteBuf
+                ((ByteBuf) o).release();
             }
         } else if (pkt instanceof CPacketCustomPayload cp) {
             Object o = U.getReference(cp, CP_DATA_OFF);
             if (o != null) {
                 U.putReference(cp, CP_DATA_OFF, null);
-                safeRelease((ByteBuf) o);
+                ((ByteBuf) o).release();
             }
         }
     }
@@ -127,7 +123,7 @@ public final class FMLNetworkHook {
             }
         } finally {
             // We retained slices for the packets, so we release the original reference from the FMLProxyPacket
-            safeRelease(payload);
+            payload.release();
         }
     }
 

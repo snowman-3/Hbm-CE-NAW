@@ -9,6 +9,7 @@ import com.hbm.blocks.generic.BlockConcreteColoredExt.EnumConcreteType;
 import com.hbm.config.GeneralConfig;
 import com.hbm.crafting.*;
 import com.hbm.crafting.handlers.*;
+import com.hbm.crafting.recipe.RecipeFluidDuctRetype;
 import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.material.MaterialShapes;
@@ -697,26 +698,27 @@ public class CraftingManager {
 		addShapelessAuto(new ItemStack(Items.PAPER, 1), new ItemStack(ModItems.crucible_template, 1, OreDictionary.WILDCARD_VALUE) );
 		addShapelessAuto(new ItemStack(Items.SLIME_BALL, 16), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15), new ItemStack(Items.DYE, 1, 15), Fluids.SULFURIC_ACID.getDict(1000) );
 
-		for(int i = 1; i < Fluids.getAll().length; ++i) {
-			ItemStack id = new ItemStack(ModItems.fluid_identifier_multi, 1, i);
-			ItemFluidIDMulti.setType(id, Fluids.fromID(i), true);
-
-			addShapelessAuto(new ItemStack(ModItems.fluid_duct, 1, i), new ItemStack(ModBlocks.fluid_duct_neo, 1), id);
-
-			addShapelessAuto(new ItemStack(ModItems.fluid_duct, 8, i),
-					new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1),
-					new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1),
-					new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1), id);
-
-			addShapelessAuto(new ItemStack(ModItems.fluid_duct, 1, i),
-					new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), id);
-
-			addShapelessAuto(new ItemStack(ModItems.fluid_duct, 8, i),
-					new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE),
-					new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE),
-					new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), id);
-		}
-
+//		for(int i = 1; i < Fluids.getAll().length; ++i) {
+//			ItemStack id = new ItemStack(ModItems.fluid_identifier_multi, 1, i);
+//			ItemFluidIDMulti.setType(id, Fluids.fromID(i), true);
+//
+//			addShapelessAuto(new ItemStack(ModItems.fluid_duct, 1, i), new ItemStack(ModBlocks.fluid_duct_neo, 1), id);
+//
+//			addShapelessAuto(new ItemStack(ModItems.fluid_duct, 8, i),
+//					new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1),
+//					new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1),
+//					new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModBlocks.fluid_duct_neo, 1), id);
+//
+//			addShapelessAuto(new ItemStack(ModItems.fluid_duct, 1, i),
+//					new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), id);
+//
+//			addShapelessAuto(new ItemStack(ModItems.fluid_duct, 8, i),
+//					new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE),
+//					new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE),
+//					new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE), id);
+//		}
+        // mlbv: used a dynamic recipe to replace the boilerplate above
+        hack.getRegistry().register(new RecipeFluidDuctRetype().setRegistryName(Tags.MODID, "duct_retype"));
 		addShapelessAuto(new ItemStack(ModBlocks.fluid_duct_neo, 1), new ItemStack(ModItems.fluid_duct, 1, OreDictionary.WILDCARD_VALUE) );
 
 		addRecipeAuto(new ItemStack(Blocks.TORCH, 3), "L", "S", 'L', LIGNITE.gem(), 'S', KEY_STICK );

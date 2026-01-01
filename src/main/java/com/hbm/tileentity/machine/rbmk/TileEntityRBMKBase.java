@@ -44,6 +44,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -79,11 +80,17 @@ public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements
 	public static final int maxSteam = 16000;
 
     @SideOnly(Side.CLIENT)
-    private static long lastDODDUpdate = 0;
+    private static long lastDODDUpdate;
     @SideOnly(Side.CLIENT)
-    private static List<String> cachedDODDLines = new ArrayList<>();
+    private static List<String> cachedDODDLines;
     @SideOnly(Side.CLIENT)
-    private static BlockPos lastDODDPos = null;
+    private static BlockPos lastDODDPos;
+
+    static {
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            cachedDODDLines = new ArrayList<>();
+        }
+    }
 
 	public boolean hasLid() {
 
