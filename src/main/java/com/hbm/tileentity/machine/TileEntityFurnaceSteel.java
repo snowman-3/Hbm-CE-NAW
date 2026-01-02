@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.api.tile.IHeatSource;
+import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.interfaces.AutoRegister;
 import com.hbm.inventory.container.ContainerFurnaceSteel;
 import com.hbm.inventory.gui.GUIFurnaceSteel;
@@ -75,7 +76,8 @@ public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGU
 					progress[i] += burn;
 					this.heat -= burn;
 					this.wasOn = true;
-				}
+                    if(world.getTotalWorldTime() % 20 == 0) PollutionHandler.incrementPollution(world, pos, PollutionHandler.PollutionType.SOOT, PollutionHandler.SOOT_PER_SECOND * 2);
+                }
 				
 				lastItems[i] = input;
 				
