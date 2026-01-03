@@ -3,6 +3,7 @@ package com.hbm.inventory.container;
 import com.hbm.inventory.SlotBattery;
 import com.hbm.inventory.SlotTakeOnly;
 import com.hbm.inventory.SlotUpgrade;
+import com.hbm.items.ModItems;
 import com.hbm.items.machine.IItemFluidIdentifier;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.lib.Library;
@@ -13,6 +14,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +30,7 @@ public class ContainerMachineTurbofan extends Container {
 
         this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 17, 17));
         this.addSlotToContainer(new SlotTakeOnly(tedf.inventory, 1, 17, 53));
-        this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 2, 98, 71));
+        this.addSlotToContainer(new SlotUpgradeTurbofan(tedf.inventory, 2, 98, 71));
         this.addSlotToContainer(new SlotBattery(tedf.inventory, 3, 143, 71));
         this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 44, 71));
         for (int i = 0; i < 3; i++) {
@@ -39,6 +41,16 @@ public class ContainerMachineTurbofan extends Container {
 
         for (int i = 0; i < 9; i++) {
             this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 179));
+        }
+    }
+
+    private static class SlotUpgradeTurbofan extends SlotUpgrade {
+        SlotUpgradeTurbofan(IItemHandler inventory, int index, int x, int y) {
+            super(inventory, index, x, y);
+        }
+        @Override
+        public boolean isItemValid(@NotNull ItemStack stack) {
+            return super.isItemValid(stack) || stack.getItem() == ModItems.flame_pony;
         }
     }
 
