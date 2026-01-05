@@ -116,6 +116,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -162,28 +163,13 @@ public class ModEventHandlerClient {
         }
     }
 
-
-    public static ItemStack getMouseOverStack() {
-
+    public static @Nullable Slot getSlotUnderMouse() {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.currentScreen instanceof GuiContainer container) {
-
-            ScaledResolution scaledresolution = new ScaledResolution(mc);
-            int width = scaledresolution.getScaledWidth();
-            int height = scaledresolution.getScaledHeight();
-            int mouseX = Mouse.getX() * width / mc.displayWidth;
-            int mouseY = height - Mouse.getY() * height / mc.displayHeight - 1;
-
-            for (Slot slot : container.inventorySlots.inventorySlots) {
-                if (slot.getHasStack() && container.isMouseOverSlot(slot, mouseX, mouseY)) {
-                    return slot.getStack();
-                }
-            }
+            return container.getSlotUnderMouse();
         }
-
         return null;
     }
-
 
     @SubscribeEvent
     public void renderTick(RenderTickEvent e) {
@@ -400,8 +386,8 @@ public class ModEventHandlerClient {
             ComparableStack comp = canneryTimestamp > Clock.get_ms() - 100 ? lastCannery : null;
 
             if (comp == null) {
-                ItemStack stack = getMouseOverStack();
-                if (stack != null) comp = new ComparableStack(stack).makeSingular();
+                Slot slot = getSlotUnderMouse();
+                if (slot != null) comp = new ComparableStack(slot.getStack()).makeSingular();
             }
 
             if (comp != null) {
