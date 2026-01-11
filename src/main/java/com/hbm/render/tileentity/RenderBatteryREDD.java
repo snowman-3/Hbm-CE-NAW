@@ -21,11 +21,16 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.Random;
+
 @AutoRegister
 public class RenderBatteryREDD extends TileEntitySpecialRenderer<TileEntityBatteryREDD> implements IItemRendererProvider {
+
+    private static final int ATTRIB_MASK = GL11.GL_ENABLE_BIT | GL11.GL_LIGHTING_BIT
+            | GL11.GL_TEXTURE_BIT
+            | GL11.GL_COLOR_BUFFER_BIT
+            | GL11.GL_DEPTH_BUFFER_BIT
+            | GL11.GL_POLYGON_BIT;
 
     @Override
     public void render(TileEntityBatteryREDD tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -64,14 +69,13 @@ public class RenderBatteryREDD extends TileEntitySpecialRenderer<TileEntityBatte
         GlStateManager.pushMatrix();
         GlStateManager.translate(0D, 5.5D, 0D);
 
-        //batteryAttribPushForAdditiveNoTex();
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+        RenderUtil.pushAttrib(ATTRIB_MASK);
 
         GlStateManager.disableCull();
         GlStateManager.disableTexture2D();
 
         GlStateManager.disableLighting();
-        GlStateManager.pushAttrib();
         GlStateManager.disableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
@@ -99,6 +103,7 @@ public class RenderBatteryREDD extends TileEntitySpecialRenderer<TileEntityBatte
                     double z1 = vec.z * len - vec.z * width;
                     double y2 = vec.y * len + vec.y * width;
                     double z2 = vec.z * len + vec.z * width;
+
                     buf.pos(xOffset, y1, z1).color(1F, 1F, 0F, 0.75F).endVertex();
                     buf.pos(xOffset, y2, z2).color(1F, 1F, 0F, 0.75F).endVertex();
                     vec.rotateAroundXDeg(span);
@@ -122,17 +127,7 @@ public class RenderBatteryREDD extends TileEntitySpecialRenderer<TileEntityBatte
 
         tess.draw();
 
-        /*batteryAttribPop();
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 0F, 0F);*/
-
-        GlStateManager.enableLighting();
-        GlStateManager.enableAlpha();
-        GlStateManager.disableBlend();
-        GlStateManager.depthMask(true);
-        GlStateManager.popAttrib();
-
-        GlStateManager.enableCull();
-        GlStateManager.enableTexture2D();
+        RenderUtil.popAttrib();
 
         GlStateManager.popMatrix();
 
@@ -162,10 +157,11 @@ public class RenderBatteryREDD extends TileEntitySpecialRenderer<TileEntityBatte
         double sparkleOsc = (Math.sin(time / 1000D) * 0.5D) % 1D;
 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+        RenderUtil.pushAttrib(ATTRIB_MASK);
+
         GlStateManager.disableCull();
 
         GlStateManager.disableLighting();
-        GlStateManager.pushAttrib();
         GlStateManager.disableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
@@ -195,13 +191,7 @@ public class RenderBatteryREDD extends TileEntitySpecialRenderer<TileEntityBatte
             GlStateManager.matrixMode(GL11.GL_MODELVIEW);
         }
 
-        GlStateManager.enableLighting();
-        GlStateManager.enableAlpha();
-        GlStateManager.disableBlend();
-        GlStateManager.depthMask(true);
-        GlStateManager.popAttrib();
-
-        GlStateManager.enableCull();
+        RenderUtil.popAttrib();
     }
 
     protected void renderZaps(TileEntityBatteryREDD tile) {
@@ -248,109 +238,6 @@ public class RenderBatteryREDD extends TileEntitySpecialRenderer<TileEntityBatte
             GlStateManager.popMatrix();
         }
     }
-    // TODO
-    // note: I did that based on ItemRenderWeaponBase, don't know if that's correct
-    // for now I'll comment usages as it doesn't fix the issue - would love some advice here, mov
-    private static final ThreadLocal<Deque<BatteryAttribState>> BATTERY_ATTRIB_STACK =
-            ThreadLocal.withInitial(ArrayDeque::new);
-
-    private static final class BatteryAttribState {
-        boolean alpha;
-        boolean blend;
-        boolean cull;
-        boolean lighting;
-        boolean texture2d;
-        boolean depthMask;
-
-        int srcRGB, dstRGB, srcA, dstA;
-
-        float r, g, b, a;
-        int shadeModel;
-        int matrixMode;
-
-        int alphaFunc;
-        float alphaRef;
-        float lightX, lightY;
-    }
-
-    private static void batteryAttribPushForAdditiveNoTex() {
-        final BatteryAttribState s = new BatteryAttribState();
-
-        s.alpha    = RenderUtil.isAlphaEnabled();
-        s.blend    = RenderUtil.isBlendEnabled();
-        s.cull     = RenderUtil.isCullEnabled();
-        s.lighting = RenderUtil.isLightingEnabled();
-        s.texture2d = RenderUtil.isTexture2DEnabled();
-        s.depthMask = RenderUtil.isDepthMaskEnabled();
-
-        s.srcRGB = RenderUtil.getBlendSrcFactor();
-        s.dstRGB = RenderUtil.getBlendDstFactor();
-        s.srcA   = RenderUtil.getBlendSrcAlphaFactor();
-        s.dstA   = RenderUtil.getBlendDstAlphaFactor();
-
-        s.r = RenderUtil.getCurrentColorRed();
-        s.g = RenderUtil.getCurrentColorGreen();
-        s.b = RenderUtil.getCurrentColorBlue();
-        s.a = RenderUtil.getCurrentColorAlpha();
-
-        s.shadeModel = RenderUtil.getShadeModel();
-        s.matrixMode = GL11.glGetInteger(GL11.GL_MATRIX_MODE);
-
-        s.alphaFunc = RenderUtil.getAlphaFunc();
-        s.alphaRef  = RenderUtil.getAlphaRef();
-        s.lightX    = OpenGlHelper.lastBrightnessX;
-        s.lightY    = OpenGlHelper.lastBrightnessY;
-
-        BATTERY_ATTRIB_STACK.get().push(s);
-
-        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-
-        if (s.cull) GlStateManager.disableCull();
-        if (s.texture2d) GlStateManager.disableTexture2D();
-        if (s.lighting) GlStateManager.disableLighting();
-
-        if (s.alpha) GlStateManager.disableAlpha();
-
-        if (!s.blend) GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(
-                GlStateManager.SourceFactor.SRC_ALPHA.factor, GlStateManager.DestFactor.ONE.factor,
-                GlStateManager.SourceFactor.ONE.factor, GlStateManager.DestFactor.ZERO.factor
-        );
-
-        GlStateManager.depthMask(false);
-    }
-
-    private static void batteryAttribPop() {
-        final BatteryAttribState s = BATTERY_ATTRIB_STACK.get().poll();
-        if (s == null) return;
-
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, s.lightX, s.lightY);
-        GlStateManager.alphaFunc(s.alphaFunc, s.alphaRef);
-
-        GlStateManager.matrixMode(s.matrixMode);
-        GlStateManager.shadeModel(s.shadeModel);
-
-        GlStateManager.color(s.r, s.g, s.b, s.a);
-
-        GlStateManager.tryBlendFuncSeparate(s.srcRGB, s.dstRGB, s.srcA, s.dstA);
-        if (s.blend) GlStateManager.enableBlend();
-        else GlStateManager.disableBlend();
-
-        if (s.alpha) GlStateManager.enableAlpha();
-        else GlStateManager.disableAlpha();
-
-        GlStateManager.depthMask(s.depthMask);
-
-        if (s.lighting) GlStateManager.enableLighting();
-        else GlStateManager.disableLighting();
-
-        if (s.texture2d) GlStateManager.enableTexture2D();
-        else GlStateManager.disableTexture2D();
-
-        if (s.cull) GlStateManager.enableCull();
-        else GlStateManager.disableCull();
-    }
 
     @Override
     public Item getItemForRenderer() {
@@ -384,5 +271,4 @@ public class RenderBatteryREDD extends TileEntitySpecialRenderer<TileEntityBatte
             }
         };
     }
-
 }
