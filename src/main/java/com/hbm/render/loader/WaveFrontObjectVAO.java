@@ -19,6 +19,7 @@ public class WaveFrontObjectVAO implements IModelCustomNamed {
     public static final List<WaveFrontObjectVAO> allVBOs = new ArrayList<>();
     public static final boolean GL30Support = GLContext.getCapabilities().OpenGL30;
     public static final boolean AppleVAOSupport = GLContext.getCapabilities().GL_APPLE_vertex_array_object;
+    public static boolean uploaded = false;
 
 
     private static final int FLOAT_SIZE = 4;
@@ -95,7 +96,6 @@ public class WaveFrontObjectVAO implements IModelCustomNamed {
 
     public void generate_vaos(){
         for (VBOBufferData data : groups) {
-            if(data.vaoHandle != -1 || data.vboHandle != -1 )continue;
 
             if(arbOr30() == 1) {
                 data.vaoHandle = GL30.glGenVertexArrays();

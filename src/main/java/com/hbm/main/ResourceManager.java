@@ -4,7 +4,6 @@ import com.hbm.Tags;
 import com.hbm.animloader.AnimatedModel;
 import com.hbm.animloader.Animation;
 import com.hbm.animloader.ColladaLoader;
-import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
 import com.hbm.lib.internal.MethodHandleHelper;
@@ -22,9 +21,6 @@ import com.hbm.util.Compat;
 import com.hbm.util.KeypadClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.SplashProgress;
@@ -1916,13 +1912,7 @@ public class ResourceManager {
 
     public static void init() {
 
-        //Drillgon discovered that it messes with GL context
-        pauseSplash();
-        for (WaveFrontObjectVAO obj : WaveFrontObjectVAO.allVBOs) {
-            obj.generate_vaos();
-        }
-        resumeSplash();
-        KeypadClient.load();
+
 
         LensVisibilityHandler.checkSphere = new WavefrontObjDisplayList(new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/diffractionspikechecker.obj"))).getListForName("sphere");
         Minecraft.getMinecraft().getTextureManager().bindTexture(fresnel_ms);
@@ -1932,7 +1922,14 @@ public class ResourceManager {
         Minecraft.getMinecraft().getTextureManager().bindTexture(noise_2);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
-
+        //Drillgon discovered that it messes with GL context
+        pauseSplash();
+        if(!WaveFrontObjectVAO.uploaded) {
+            WaveFrontObjectVAO.allVBOs.forEach(WaveFrontObjectVAO::generate_vaos);
+            WaveFrontObjectVAO.uploaded = true;
+        }
+        resumeSplash();
+        KeypadClient.load();
 
     }
 
