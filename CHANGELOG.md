@@ -30,9 +30,11 @@ and all related recipes (PR #1247 by SilentYeti)
 - Fixed fluid availability accounting across receiver priority tiers in fluid net, causing lost fluid volume
 - Fixed MIRV custom missiles not working
 - Fixed a memory leak related to resource reloads
+- Fixed missiles dropping items with meta = 0 unconditionally and doesn't drop rare items when hit by AB missile
 ### Changes
 - Most old batteries were hidden in creative tabs
 - Aligned black hole entity behavior with 1.7
+- Updated Bomber logic to match 1.7 behavior
 ### New Features
 - Ported new FEnSU and other changes to energy storage blocks from 1.7
 - Ported fluid valves and fluid switch from 1.7
