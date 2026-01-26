@@ -975,7 +975,7 @@ public final class RadVisOverlay {
         if (sec.kind == ChunkRef.KIND_SINGLE) return sec.single.rad;
         if (sec.kind == ChunkRef.KIND_MULTI) {
             if ((pocketIndex & ~15) != 0 || pocketIndex >= sec.pocketCount) return 0.0d;
-            return sec.multi.getRad(pocketIndex);
+            return sec.multi.data[pocketIndex << 1];
         }
         return 0.0d;
     }
@@ -1200,8 +1200,10 @@ public final class RadVisOverlay {
     }
 
     private static String formatRad(double v) {
-        if (!Double.isFinite(v)) return "inf";
-        return String.format(Locale.ROOT, "%.3f", v);
+        if (Double.isNaN(v)) return "nan";
+        if (v == Double.POSITIVE_INFINITY) return "inf";
+        if (v == Double.NEGATIVE_INFINITY) return "-inf";
+        return String.format(Locale.ROOT, "%.3e", v);
     }
 
     public enum Mode {WIRE, SLICE, FACES, STATE, ERRORS}
