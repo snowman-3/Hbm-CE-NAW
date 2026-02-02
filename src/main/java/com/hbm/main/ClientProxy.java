@@ -248,7 +248,7 @@ public class ClientProxy extends ServerProxy {
         registerGrenadeRenderer(EntityGrenadeIFMystery.class, ModItems.grenade_if_mystery);
         registerGrenadeRenderer(EntityGrenadeIFSpark.class, ModItems.grenade_if_spark);
         registerGrenadeRenderer(EntityGrenadeIFHopwire.class, ModItems.grenade_if_hopwire);
-        registerGrenadeRenderer(EntityGrenadeIFNull.class, ModItems.grenade_if_null);
+        //registerGrenadeRenderer(EntityGrenadeIFNull.class, ModItems.grenade_if_null);
         registerGrenadeRenderer(EntityGrenadeDynamite.class, ModItems.stick_dynamite);
         registerGrenadeRenderer(EntityAcidBomb.class, Items.SLIME_BALL);
         registerGrenadeRenderer(EntityGrenadeBouncyGeneric.class, ModItems.stick_dynamite_fishing);

@@ -173,9 +173,9 @@ public class ItemGrenade extends ItemBakedBase {
 			if (this == ModItems.grenade_if_hopwire) {
 				worldIn.spawnEntity(new EntityGrenadeIFHopwire(worldIn, playerIn, handIn));
 			}
-			if (this == ModItems.grenade_if_null) {
-				worldIn.spawnEntity(new EntityGrenadeIFNull(worldIn, playerIn, handIn));
-			}
+//			if (this == ModItems.grenade_if_null) {
+//				worldIn.spawnEntity(new EntityGrenadeIFNull(worldIn, playerIn, handIn));
+//			}
 //			if (this == ModItems.nuclear_waste_pearl) {
 //				p_77659_2_.spawnEntityInWorld(new EntityWastePearl(p_77659_2_, p_77659_3_));
 //			}
@@ -266,10 +266,10 @@ public class ItemGrenade extends ItemBakedBase {
 			list.add("");
 			list.add(TextFormatting.ITALIC + "\"All I ever wished for was a bike that didn't fall over.\"");
 		}
-		if (this == ModItems.grenade_if_null) {
-			list.add("");
-			list.add(TextFormatting.ITALIC + "java.lang.NullPointerException");
-		}
+//		if (this == ModItems.grenade_if_null) {
+//			list.add("");
+//			list.add(TextFormatting.ITALIC + "java.lang.NullPointerException");
+//		}
 		if (this == ModItems.grenade_smart) {
 			list.add("");
 			list.add("\"Why did it not blow up????\"");

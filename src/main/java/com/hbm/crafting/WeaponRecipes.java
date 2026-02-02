@@ -305,7 +305,7 @@ public class WeaponRecipes {
         CraftingManager.addRecipeAuto(new ItemStack(ModItems.grenade_if_mystery, 1), "A", "G", "A", 'G', ModItems.grenade_if_generic, 'A', ModItems.powder_magic );
         CraftingManager.addRecipeAuto(new ItemStack(ModItems.grenade_if_spark, 1), " A ", "AGA", " A ", 'G', ModItems.grenade_if_generic, 'A', ModItems.powder_spark_mix );
         CraftingManager.addRecipeAuto(new ItemStack(ModItems.grenade_if_hopwire, 1), " A ", "AGA", " A ", 'G', ModItems.grenade_if_generic, 'A', ModItems.powder_power );
-        CraftingManager.addRecipeAuto(new ItemStack(ModItems.grenade_if_null, 1), "BAB", "AGA", "BAB", 'G', ModItems.grenade_if_generic, 'A', ModItems.undefined, 'B', BIGMT.ingot() );
+        //CraftingManager.addRecipeAuto(new ItemStack(ModItems.grenade_if_null, 1), "BAB", "AGA", "BAB", 'G', ModItems.grenade_if_generic, 'A', ModItems.undefined, 'B', BIGMT.ingot() );
 
         //Mines
         CraftingManager.addRecipeAuto(new ItemStack(ModBlocks.mine_ap, 4), "I", "C", "S", 'I', ModItems.plate_polymer, 'C', ANY_SMOKELESS.dust(), 'S', STEEL.ingot() );

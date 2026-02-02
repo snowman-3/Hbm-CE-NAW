@@ -65,7 +65,7 @@ public class GrenadeDispenserRegistry {
         GRENADE_FACTORIES.put(ModItems.grenade_if_mystery, (w, p) -> new EntityGrenadeIFMystery(w, p.getX(), p.getY(), p.getZ()));
         GRENADE_FACTORIES.put(ModItems.grenade_if_spark, (w, p) -> new EntityGrenadeIFSpark(w, p.getX(), p.getY(), p.getZ()));
         GRENADE_FACTORIES.put(ModItems.grenade_if_hopwire, (w, p) -> new EntityGrenadeIFHopwire(w, p.getX(), p.getY(), p.getZ()));
-        GRENADE_FACTORIES.put(ModItems.grenade_if_null, (w, p) -> new EntityGrenadeIFNull(w, p.getX(), p.getY(), p.getZ()));
+        //GRENADE_FACTORIES.put(ModItems.grenade_if_null, (w, p) -> new EntityGrenadeIFNull(w, p.getX(), p.getY(), p.getZ()));
     }
 
     public static void registerDispenserBehaviors() {

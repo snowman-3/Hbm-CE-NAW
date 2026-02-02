@@ -61,7 +61,7 @@ either via bug reports and directly, via pull requests.We always seek new contri
 ### Will this version have modifications for specific mod pack use?
 **No!** <br>
 While the port was started as part of the warfactory project, It is maintained as a standalone mod. Any changes are
-in order to ensure compatibility, stability, or ease development for mod pack developers, however no direct changes for
+in order to ensure compatАААibility, stability, or ease development for mod pack developers, however no direct changes for
 specific mod packs will be implemented.
 
 ### Will you port it to 1.1x/1.2x?
