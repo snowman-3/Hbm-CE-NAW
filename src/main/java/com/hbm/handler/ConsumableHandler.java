@@ -46,7 +46,7 @@ public class ConsumableHandler {
         itemActions.put(ModItems.jetpack_tank, ConsumableHandler::handleJetpackTank);
         itemActions.put(ModItems.gun_kit_1, ConsumableHandler::handleGunKit1);
         itemActions.put(ModItems.gun_kit_2, ConsumableHandler::handleGunKit2);
-        itemActions.put(ModItems.cbt_device, ConsumableHandler::handleCbtDevice);
+        //itemActions.put(ModItems.cbt_device, ConsumableHandler::handleCbtDevice);
         itemActions.put(ModItems.syringe_mkunicorn, ConsumableHandler::handleMkUnicornSyringe);
         itemActions.put(ModItems.euphemium_stopper, ConsumableHandler::handleEupheriumStopper);
 

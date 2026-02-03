@@ -239,7 +239,7 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.wrench, 1), " S ", " IS", "I  ", 'S', STEEL.ingot(), 'I', IRON.ingot() );
 		addRecipeAuto(new ItemStack(ModItems.wrench_flipped, 1), "S", "D", "W", 'S', Items.IRON_SWORD, 'D', ModItems.ducttape, 'W', ModItems.wrench );
 		addRecipeAuto(new ItemStack(ModItems.memespoon, 1), "CGC", "PSP", "IAI", 'C', ModItems.powder_yellowcake, 'G', TH232.block(), 'P', ModItems.photo_panel, 'S', ModItems.steel_shovel, 'I', ModItems.plate_polymer, 'A', "ingotAustralium" );
-		addShapelessAuto(new ItemStack(ModItems.cbt_device, 1), STEEL.bolt(), ModItems.wrench );
+		//addShapelessAuto(new ItemStack(ModItems.cbt_device, 1), STEEL.bolt(), ModItems.wrench );
 
 		addShapelessAuto(new ItemStack(ModItems.toothpicks, 3), KEY_STICK, KEY_STICK, KEY_STICK );
 		addRecipeAuto(new ItemStack(ModItems.ducttape, 4), "F", "P", "S", 'F', Items.STRING, 'S', KEY_SLIME, 'P', Items.PAPER );
