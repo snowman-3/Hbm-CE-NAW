@@ -1061,7 +1061,7 @@ public class ModEventHandler {
                     //Shackles
                     if (revive.getItem() instanceof ItemModShackles && HbmLivingProps.getRadiation(event.getEntityLiving()) < 1000D) {
 
-                        revive.setItemDamage(revive.getItemDamage() + 1);
+                        revive.setItemDamage(revive.getItemDamage() + 3);
 
                         int dmg = revive.getItemDamage();
                         ArmorModHandler.applyMod(stack, revive);

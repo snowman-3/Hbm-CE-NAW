@@ -108,10 +108,10 @@ public class ConsumableHandler {
 
     private static void handleAwesomeSyringe(final Context context) {
         context.addPotionEffects(
-                new PotionEffect(MobEffects.REGENERATION, 50 * 20, 9),
+                new PotionEffect(MobEffects.REGENERATION, 50 * 20, 4),
                 new PotionEffect(MobEffects.RESISTANCE, 50 * 20, 9),
                 new PotionEffect(MobEffects.FIRE_RESISTANCE, 50 * 20, 0),
-                new PotionEffect(MobEffects.STRENGTH, 50 * 20, 24),
+                new PotionEffect(MobEffects.STRENGTH, 50 * 20, 6),
                 new PotionEffect(MobEffects.HASTE, 50 * 20, 9),
                 new PotionEffect(MobEffects.SPEED, 50 * 20, 6),
                 new PotionEffect(MobEffects.JUMP_BOOST, 50 * 20, 9),
