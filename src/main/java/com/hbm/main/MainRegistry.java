@@ -25,6 +25,7 @@ import com.hbm.handler.*;
 import com.hbm.handler.imc.IMCHandler;
 import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.handler.radiation.RadiationSystemNT;
+import com.hbm.handler.threading.BombForkJoinPool;
 import com.hbm.handler.threading.PacketThreading;
 import com.hbm.hazard.HazardData;
 import com.hbm.hazard.HazardRegistry;
@@ -155,6 +156,7 @@ public class MainRegistry {
         StructureConfig.loadFromConfig(config);
         reloadCompatConfig();
         BedrockOreJsonConfig.init();
+        CassetteJsonConfig.init();
         config.save();
     }
 
@@ -174,10 +176,10 @@ public class MainRegistry {
             IMCHandler handler = IMCHandler.getHandler(message.key);
 
             if (handler != null) {
-                MainRegistry.logger.info("Received IMC of type >" + message.key + "< from " + message.getSender() + "!");
+                MainRegistry.logger.info("Received IMC of type >{}< from {}!", message.key, message.getSender());
                 handler.process(message);
             } else {
-                MainRegistry.logger.error("Could not process unknown IMC type \"" + message.key + "\"");
+                MainRegistry.logger.error("Could not process unknown IMC type \"{}\"", message.key);
             }
         }
     }
@@ -194,9 +196,8 @@ public class MainRegistry {
         if (generalOverride > 0 && generalOverride < 19) {
             polaroidID = generalOverride;
         } else {
-            polaroidID = rand.nextInt(18) + 1;
-            while (polaroidID == 4 || polaroidID == 9)
-                polaroidID = rand.nextInt(18) + 1;
+            do polaroidID = rand.nextInt(18) + 1;
+            while (polaroidID == 4 || polaroidID == 9);
         }
 
         configDir = event.getModConfigurationDirectory();
@@ -387,6 +388,7 @@ public class MainRegistry {
         RadiationSystemNT.onServerStopped();
         PhasedEventHandler.onServerStopped();
         PhasedStructureRegistry.onServerStopped();
+        BombForkJoinPool.onServerStopped();
     }
 
     @EventHandler
