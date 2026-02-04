@@ -258,7 +258,6 @@ public final class FluidIdRemapper {
             "DHC"                       // 205
     };
 
-    @NotNull
     public static FluidType remapLegacyId(int oldId) {
         if (oldId < 0) throw new ArrayIndexOutOfBoundsException(oldId);
         if (oldId >= LEGACY_ORDER.length) return Fluids.fromID(oldId); // probably addon fluids, assume they have set the id high enough
