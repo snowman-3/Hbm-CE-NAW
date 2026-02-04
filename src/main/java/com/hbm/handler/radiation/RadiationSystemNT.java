@@ -19,9 +19,7 @@ import com.hbm.util.SectionKeyHash;
 import it.unimi.dsi.fastutil.HashCommon;
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleArrays;
-import it.unimi.dsi.fastutil.longs.Long2ReferenceOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongArrays;
+import it.unimi.dsi.fastutil.longs.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -409,16 +407,42 @@ public final class RadiationSystemNT {
     public static void markSectionForRebuild(World world, BlockPos pos) {
         if (world.isRemote || !GeneralConfig.advancedRadiation) return;
         if (isOutsideWorld(pos)) return;
+        markSectionForRebuild(world, Library.blockPosToSectionLong(pos));
+    }
+
+    @ServerThread
+    public static void markSectionForRebuild(World world, long sck) {
+        if (world.isRemote || !GeneralConfig.advancedRadiation) return;
         WorldServer ws = (WorldServer) world;
-        long sck = Library.blockPosToSectionLong(pos);
         long ck = Library.sectionToChunkLong(sck);
         Chunk chunk = ws.getChunkProvider().loadedChunks.get(ck);
         if (chunk == null) return;
         WorldRadiationData data = getWorldRadData(ws);
         int sy = Library.getSectionY(sck);
+        if ((sy & ~15) != 0) return;
         ChunkRef cr = data.onChunkLoaded(chunk.x, chunk.z, chunk);
         data.dirtyCk.add(cr, sy);
         chunk.markDirty();
+    }
+
+    @ServerThread
+    public static void markSectionsForRebuild(World world, LongIterable sections) {
+        if (world.isRemote || !GeneralConfig.advancedRadiation) return;
+        WorldServer ws = (WorldServer) world;
+        WorldRadiationData data = getWorldRadData(ws);
+        LongIterator it = sections.iterator();
+        while (it.hasNext()) {
+            long sck = it.nextLong();
+            long ck = Library.sectionToChunkLong(sck);
+            Chunk chunk = ws.getChunkProvider().loadedChunks.get(ck);
+            if (chunk == null) continue;
+
+            int sy = Library.getSectionY(sck);
+            if ((sy & ~15) != 0) continue;
+            ChunkRef cr = data.onChunkLoaded(chunk.x, chunk.z, chunk);
+            data.dirtyCk.add(cr, sy);
+            chunk.markDirty();
+        }
     }
 
     @ServerThread
