@@ -84,6 +84,14 @@ public final class RadVisOverlay {
     private RadVisOverlay() {
     }
 
+    public static void clearCaches() {
+        POCKET_MESH_CACHE.clear();
+        MULTI_OUTER_CACHE.clear();
+        SINGLE_OUTER_CACHE.clear();
+        ERROR_CACHE.clear();
+        ERROR_MASK.clear();
+    }
+
     // quad packing: pocket:4 | face:3 | plane:5 | u0:5 | v0:5 | u1:5 | v1:5
     private static int packQuad(int pocket, int face, int plane, int u0, int v0, int u1, int v1) {
         return (pocket & 15) | ((face & 7) << 4) | ((plane & 31) << 7) | ((u0 & 31) << 12) | ((v0 & 31) << 17) | ((u1 & 31) << 22) | ((v1 & 31) << 27);
@@ -1690,6 +1698,23 @@ public final class RadVisOverlay {
         public int focusDx = 0;
         public int focusDy = 0;
         public int focusDz = 0;
+
+        public void reset() {
+            enabled = false;
+            radiusChunks = 2;
+            mode = Mode.POCKETS;
+            sliceAutoY = true;
+            sliceY = 0;
+            depth = true;
+            alpha = 0.4f;
+            verify = false;
+            verifyInterval = 10;
+            focusEnabled = false;
+            focusAnchor = null;
+            focusDx = 0;
+            focusDy = 0;
+            focusDz = 0;
+        }
     }
 
     private record PocketMesh(byte[] pocketDataRef, int pocketCount, int[] quads) {
