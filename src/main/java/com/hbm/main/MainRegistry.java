@@ -49,6 +49,7 @@ import com.hbm.lib.HbmWorld;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmDetox;
 import com.hbm.potion.HbmPotion;
+import com.hbm.saveddata.FluidIdRemapper;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.tileentity.bomb.TileEntityLaunchPadBase;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
@@ -361,6 +362,9 @@ public class MainRegistry {
         AdvGen.generate();
     }
 
+    /**
+     * After initial world & chunk loading, before FMLServerStartedEvent
+     */
     @EventHandler
     public void serverStarting(FMLServerStartingEvent evt) {
         RBMKDials.createDials(evt.getServer().getEntityWorld());
@@ -371,10 +375,11 @@ public class MainRegistry {
         AdvancementManager.init(evt.getServer());
         //MUST be initialized AFTER achievements!!
         BobmazonOfferFactory.init();
-
-        PhasedStructureRegistry.onServerStarting(evt.getServer());
     }
 
+    /**
+     * Immediately posted when the last tick before server stopping finishes. Worlds and Chunks are still loaded.
+     */
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent evt) {
         RadiationSystemNT.onServerStopping();
@@ -383,16 +388,30 @@ public class MainRegistry {
         ModEventHandler.RBMK_COL_HEIGHT_MAP.clear();
     }
 
+    /**
+     * After FMLServerStoppingEvent, the following happens:
+     * - finalTick: handles exception
+     * - stopServer: handles saving & unloading
+     *      - network system is terminated
+     *      - Player data is saved and players are removed
+     *      - All worlds are saved
+     *      - POST WorldEvent.Unload and then saveHandler.flush() on all worlds
+     *      - Detach World strong references from DimensionManager
+     *  - POST FMLServerStoppedEvent
+     *  - If dedicated, the program is terminated
+     * @param evt
+     */
     @EventHandler
     public void serverStopped(FMLServerStoppedEvent evt) {
         RadiationSystemNT.onServerStopped();
         PhasedEventHandler.onServerStopped();
         PhasedStructureRegistry.onServerStopped();
+        FluidIdRemapper.onServerStopped();
         BombForkJoinPool.onServerStopped();
     }
 
     @EventHandler
-    public void fMLLoadCompleteEvent(FMLLoadCompleteEvent evt) {
+    public void loadComplete(FMLLoadCompleteEvent evt) {
         proxy.onLoadComplete(evt);
         RadiationSystemNT.onLoadComplete();
         FalloutConfigJSON.initialize();

@@ -2,8 +2,13 @@
 > CurseForge accepts changelogs in Markdown format, just copy-paste the content below when a new release
 > is published there. The content of this file shall be cleared afterward.  
 > Previous public release: 1.5.2.1
-> Next release should be at least 1.6.0.0 due to API breakages on changes of slot filter classes and the new phase gen
+> Next release should be at least 1.6.0.0 due to API breakages on changes of slot filter classes and the new phase gen  
+> Actually should be at least 2.0.0.0 due to major change in fluid id
 
+### SUBSTANTIAL CHANGES
+**Changed the order of fluid ids. A remapper is added to remap FluidTankNTM(affect most machines) and fluid ducts' type,
+but ALL ITEMS, including tanks/barrels, will observe an ID shift! to mitigate, move your fluids into a fluid 
+tank(machine), or into a ForgerFluid fluid tank(e.g. Mekanism tanks) before updating!** 
 ### Breaking Changes
 - Removed Watz pellets from NTM:Space fork
 - Removed `gas_mask_filter_radon`
@@ -17,6 +22,8 @@
 - Fixed RBMK console NPE
 - Fixed Crayon item texture z-fighting
 - Fixed some crucible bugs
+- Fixed Fallout Rain pinning worker threads on jvm
+- Fixed Diode texture and energy transfer
 ### Changes
 - Reworked phased worldgen system(`package com.hbm.world.phased`) to be vastly more extensible and robust
 ### New Features
@@ -25,8 +32,12 @@
 - Added pocket visualization for radiation system as the default radvis mode. Turn on with `/radvis on`
 - Customizable Siren Soundtracks! (PR #1320 by Vidarin)
 - Ported `missile_shuttle`
+- Doors are now configurable! see `hbm.cfg` `9.99_CE_02_doorConf`. Three modes are available:
+  - "DEFAULT", default behavior
+  - "TOOLABLE", can toggle between default and redstone-only mode with a screwdriver. When locked, requires key on offhand.
+  - "REDSTONE", redstone only
 ### Performance
-- Overhauled Radiation System to be ~50% faster
+- Overhauled Radiation System to be ~60% faster
 - Made nuke algorithm 2 marginally faster
 - Reduced network traffic of RBMK console
 ### Misc
