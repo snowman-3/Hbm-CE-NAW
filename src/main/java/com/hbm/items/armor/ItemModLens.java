@@ -94,7 +94,7 @@ public class ItemModLens extends ItemArmorMod implements ISatChip {
                         if(addIf(ModBlocks.ore_bedrock_oil, b, 300, aX, seg, aZ, I18nUtil.resolveKey("tile.ore_bedrock_oil.name"), 0xa0a0a0, player)) hits++;
                         if(addIf(ModBlocks.ore_coltan, b, 5, aX, seg, aZ, I18nUtil.resolveKey("tile.ore_coltan.name"), 0xa0a000, player)) hits++;
                         if(addIf(ModBlocks.stone_gneiss, b, 5000, aX, seg, aZ, I18nUtil.resolveKey("tile.stone_gneiss.name"), 0x8080ff, player)) hits++;
-                        if(addIf(ModBlocks.ore_australium, b, 1000, aX, seg, aZ, I18nUtil.resolveKey("tile.ore_australium.name"), 0xffff00, player)) hits++;
+                        //if(addIf(ModBlocks.ore_australium, b, 1000, aX, seg, aZ, I18nUtil.resolveKey("tile.ore_australium.name"), 0xffff00, player)) hits++;
                         if(addIf(Blocks.END_PORTAL_FRAME, b, 1, aX, seg, aZ, I18nUtil.resolveKey("neutrino.end_portal.name"), 0x40b080, player)) hits++;
                         if(addIf(ModBlocks.volcano_core, b, 1, aX, seg, aZ, I18nUtil.resolveKey("tile.volcano_core.name"), 0xff4000, player)) hits++;
                         if(addIf(ModBlocks.pink_log, b, 1, aX, seg, aZ, I18nUtil.resolveKey("tile.pink_log.name"), 0xff00ff, player)) hits++;

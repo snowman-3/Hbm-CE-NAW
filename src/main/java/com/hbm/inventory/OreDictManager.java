@@ -544,7 +544,7 @@ public class OreDictManager {
         /*
          * RARE METALS
          */
-        AUSTRALIUM.nugget(nugget_australium).billet(billet_australium).ingot(ingot_australium).dust(powder_australium).block(block_australium).ore(ore_australium);
+        //AUSTRALIUM.nugget(nugget_australium).billet(billet_australium).ingot(ingot_australium).dust(powder_australium).block(block_australium).ore(ore_australium);
 
         /*
          * RARE EARTHS

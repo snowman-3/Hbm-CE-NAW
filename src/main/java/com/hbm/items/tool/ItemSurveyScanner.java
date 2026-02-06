@@ -55,7 +55,7 @@ public class ItemSurveyScanner extends Item {
 						else if (block == ModBlocks.stone_depth) hasDepth = true;
 						else if (block == ModBlocks.stone_depth_nether) hasDepth = true;
 						else if (block == ModBlocks.stone_gneiss) hasSchist = true;
-						else if (block == ModBlocks.ore_australium) hasAussie = true;
+						//else if (block == ModBlocks.ore_australium) hasAussie = true;
 					}
 
 					BlockPos bedrockPos = new BlockPos(x + a * 2, 0, z + b * 2);

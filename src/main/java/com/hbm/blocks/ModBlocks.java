@@ -290,7 +290,7 @@ public class ModBlocks {
     public static final Block ore_cinnabar = new BlockNTMOre("ore_cinnabar", OreEnum.CINNABAR, 1).setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);
     public static final Block ore_coltan = new BlockNTMOre("ore_coltan", OreEnum.COLTAN, 3, 20).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(10.0F);
 
-    public static final Block ore_australium = new BlockNTMOre("ore_australium", null, 4, 100).setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);
+    //public static final Block ore_australium = new BlockNTMOre("ore_australium", null, 4, 100).setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);
     public static final Block stone_depth = new BlockDepth("stone_depth").setCreativeTab(MainRegistry.resourceTab);
     public static final Block ore_depth_cinnabar = new BlockDepthOre("ore_depth_cinnabar", OreEnum.CINNABAR).setCreativeTab(MainRegistry.resourceTab);
     public static final Block ore_depth_zirconium = new BlockDepthOre("ore_depth_zirconium", OreEnum.ZIRCON).setCreativeTab(MainRegistry.resourceTab);

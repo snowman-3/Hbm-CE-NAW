@@ -215,7 +215,7 @@ public class HbmWorldGen implements IWorldGenerator {
 
         //Special ores
 
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.australiumSpawn.get(dimID)), 3, 14, 18, ModBlocks.ore_australium);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.australiumSpawn.get(dimID)), 3, 14, 18, ModBlocks.ore_australium);
 
         //Nether ores
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.netherUraniumSpawn.get(dimID)), 6, 0, 127, ModBlocks.ore_nether_uranium, Blocks.NETHERRACK);
@@ -271,8 +271,8 @@ public class HbmWorldGen implements IWorldGenerator {
                 int randPosY = rand.nextInt(15) + 15;
                 int randPosZ = chunkMinZ + rand.nextInt(16);
 
-                if (randPosX <= -350 && randPosX >= -450 && randPosZ <= -350 && randPosZ >= -450)
-                    new WorldGenMinableNonCascade(ModBlocks.ore_australium.getDefaultState(), 50).generate(world, rand, new BlockPos(randPosX, randPosY, randPosZ));
+                //if (randPosX <= -350 && randPosX >= -450 && randPosZ <= -350 && randPosZ >= -450)
+                //    new WorldGenMinableNonCascade(ModBlocks.ore_australium.getDefaultState(), 50).generate(world, rand, new BlockPos(randPosX, randPosY, randPosZ));
             }
         }
 
