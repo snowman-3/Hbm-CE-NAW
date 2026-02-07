@@ -348,26 +348,26 @@ public abstract class EntityFallout extends Entity implements IChunkLoader {
                     return isSurface;
                 }
                 if ("oreUranium".equals(oreName) && !registryName.equals("hbm:ore_nether_uranium_scorched")) {
-                    Block scorched = ModBlocks.ore_uranium_scorched;
+                    //Block scorched = ModBlocks.ore_uranium_scorched;
                     Block schrab = ModBlocks.ore_schrabidium;
                     double level = s6;
                     int schrabChance = VersatileConfig.getSchrabOreChance();
-                    if (registryName.equals("hbm:ore_nether_uranium")) {
-                        scorched = ModBlocks.ore_nether_uranium_scorched;
-                        schrab = ModBlocks.ore_nether_schrabidium;
-                        level = s5;
-                    } else if (registryName.equals("hbm:ore_gneiss_uranium")) {
-                        scorched = ModBlocks.ore_gneiss_uranium_scorched;
-                        schrab = ModBlocks.ore_gneiss_schrabidium;
-                        level = s4;
-                        schrabChance /= 2;
-                    }
+                    //if (registryName.equals("hbm:ore_nether_uranium")) {
+                    //    scorched = ModBlocks.ore_nether_uranium_scorched;
+                    //    schrab = ModBlocks.ore_nether_schrabidium;
+                    //    level = s5;
+                    //} else if (registryName.equals("hbm:ore_gneiss_uranium")) {
+                    //    scorched = ModBlocks.ore_gneiss_uranium_scorched;
+                    //    schrab = ModBlocks.ore_gneiss_schrabidium;
+                    //    level = s4;
+                    //    schrabChance /= 2;
+                    //}
                     if (dist <= level) {
                         if (rand.nextInt(1 + schrabChance) == 0) {
                             world.setBlockState(pos, schrab.getDefaultState());
-                        } else {
-                            world.setBlockState(pos, scorched.getDefaultState());
-                        }
+                        } //else {
+                          //  world.setBlockState(pos, scorched.getDefaultState());
+                        //}
                     }
                     return false;
                 }

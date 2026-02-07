@@ -17,7 +17,7 @@ public class BlockTab extends CreativeTabs {
 	@Override
     @SideOnly(Side.CLIENT)
 	public ItemStack createIcon() {
-		if(ModBlocks.ore_uranium != null){
+		if(ModBlocks.brick_concrete != null){
 			return new ItemStack(Item.getItemFromBlock(ModBlocks.brick_concrete));
 		}
 		return new ItemStack(Items.IRON_PICKAXE);

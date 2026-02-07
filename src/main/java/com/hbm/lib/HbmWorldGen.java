@@ -137,8 +137,8 @@ public class HbmWorldGen implements IWorldGenerator {
             DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, 1, 3, 10, 5, ModBlocks.ore_alexandrite);
         }
         if (dimID == 0) {
-            DepthDeposit.generateConditionOverworld(world, chunkMinX, 0, 3, chunkMinZ, 5, 0.6D, ModBlocks.cluster_depth_iron, rand, 24);
-            DepthDeposit.generateConditionOverworld(world, chunkMinX, 0, 3, chunkMinZ, 5, 0.6D, ModBlocks.cluster_depth_titanium, rand, 32);
+            //DepthDeposit.generateConditionOverworld(world, chunkMinX, 0, 3, chunkMinZ, 5, 0.6D, ModBlocks.cluster_depth_iron, rand, 24);
+            //DepthDeposit.generateConditionOverworld(world, chunkMinX, 0, 3, chunkMinZ, 5, 0.6D, ModBlocks.cluster_depth_titanium, rand, 32);
             DepthDeposit.generateConditionOverworld(world, chunkMinX, 0, 3, chunkMinZ, 5, 0.6D, ModBlocks.cluster_depth_tungsten, rand, 32);
             DepthDeposit.generateConditionOverworld(world, chunkMinX, 0, 3, chunkMinZ, 5, 0.8D, ModBlocks.ore_depth_cinnabar, rand, 16);
             DepthDeposit.generateConditionOverworld(world, chunkMinX, 0, 3, chunkMinZ, 5, 0.8D, ModBlocks.ore_depth_zirconium, rand, 16);
@@ -179,15 +179,15 @@ public class HbmWorldGen implements IWorldGenerator {
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.gassshaleSpawn.get(dimID)) * 3, 10, 30, 10, ModBlocks.ore_gneiss_gas, ModBlocks.stone_gneiss);
 
         //Normal ores
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.uraniumSpawn.get(dimID)), 5, 5, 20, ModBlocks.ore_uranium);
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.thoriumSpawn.get(dimID)), 5, 5, 25, ModBlocks.ore_thorium);
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.titaniumSpawn.get(dimID)), 6, 5, 30, ModBlocks.ore_titanium);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.uraniumSpawn.get(dimID)), 5, 5, 20, ModBlocks.ore_uranium);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.thoriumSpawn.get(dimID)), 5, 5, 25, ModBlocks.ore_thorium);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.titaniumSpawn.get(dimID)), 6, 5, 30, ModBlocks.ore_titanium);
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.sulfurSpawn.get(dimID)), 8, 5, 30, ModBlocks.ore_sulfur);
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.aluminiumSpawn.get(dimID)), 6, 5, 40, ModBlocks.ore_aluminium);
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.copperSpawn.get(dimID)), 6, 5, 45, ModBlocks.ore_copper);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.copperSpawn.get(dimID)), 6, 5, 45, ModBlocks.ore_copper);
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.fluoriteSpawn.get(dimID)), 4, 5, 45, ModBlocks.ore_fluorite);
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.niterSpawn.get(dimID)), 6, 5, 30, ModBlocks.ore_niter);
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.tungstenSpawn.get(dimID)), 8, 5, 30, ModBlocks.ore_tungsten);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.tungstenSpawn.get(dimID)), 8, 5, 30, ModBlocks.ore_tungsten);
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.leadSpawn.get(dimID)), 9, 5, 30, ModBlocks.ore_lead);
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.berylliumSpawn.get(dimID)), 4, 5, 30, ModBlocks.ore_beryllium);
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.rareSpawn.get(dimID)), 5, 5, 20, ModBlocks.ore_rare);
@@ -196,10 +196,10 @@ public class HbmWorldGen implements IWorldGenerator {
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.cinnabarSpawn.get(dimID)), 4, 8, 16, ModBlocks.ore_cinnabar);
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.cobaltSpawn.get(dimID)), 4, 4, 8, ModBlocks.ore_cobalt);
 
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.ironClusterSpawn.get(dimID)), 6, 15, 45, ModBlocks.cluster_iron);
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.titaniumClusterSpawn.get(dimID)), 6, 15, 30, ModBlocks.cluster_titanium);
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.aluminiumClusterSpawn.get(dimID)), 6, 15, 35, ModBlocks.cluster_aluminium);
-        DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.copperClusterSpawn.get(dimID)), 6, 15, 20, ModBlocks.cluster_copper);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.ironClusterSpawn.get(dimID)), 6, 15, 45, ModBlocks.cluster_iron);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.titaniumClusterSpawn.get(dimID)), 6, 15, 30, ModBlocks.cluster_titanium);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.aluminiumClusterSpawn.get(dimID)), 6, 15, 35, ModBlocks.cluster_aluminium);
+        //DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, parseInt(CompatibilityConfig.copperClusterSpawn.get(dimID)), 6, 15, 20, ModBlocks.cluster_copper);
 
         DungeonToolbox.generateOre(world, rand, chunkMinX, chunkMinZ, WorldConfig.limestoneSpawn, 6, 15, 20, ModBlocks.stone_resource.getDefaultState().withProperty(BlockResourceStone.META, BlockEnums.EnumStoneType.LIMESTONE.ordinal()));
 

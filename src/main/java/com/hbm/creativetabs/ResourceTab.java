@@ -17,9 +17,9 @@ public class ResourceTab extends CreativeTabs {
 	@Override
     @SideOnly(Side.CLIENT)
 	public ItemStack createIcon() {
-		if(ModBlocks.ore_uranium != null){
-			return new ItemStack(Item.getItemFromBlock(ModBlocks.ore_uranium));
-		}
+		//if(ModBlocks.ore_uranium != null){
+		//	return new ItemStack(Item.getItemFromBlock(ModBlocks.ore_uranium));
+		//}
 		return new ItemStack(Items.IRON_PICKAXE);
 	}
 

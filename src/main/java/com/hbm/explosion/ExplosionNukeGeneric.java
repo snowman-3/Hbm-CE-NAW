@@ -335,13 +335,13 @@ public class ExplosionNukeGeneric {
                 }
             } else if (bs.getMaterial() == Material.WOOD && bs.isOpaqueCube() && b != ModBlocks.waste_log) {
                 world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-            } else if (b == ModBlocks.ore_uranium) {
-                rand = random.nextInt(VersatileConfig.getSchrabOreChance());
-                if (rand == 1) {
-                    world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
-                } else {
-                    world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
-                }
+            //} else if (b == ModBlocks.ore_uranium) {
+            //    rand = random.nextInt(VersatileConfig.getSchrabOreChance());
+            //    if (rand == 1) {
+            //        world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+            //    } else {
+            //        world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
+            //    }
             } else if (b == ModBlocks.ore_nether_uranium) {
                 rand = random.nextInt(VersatileConfig.getSchrabOreChance());
                 if (rand == 1) {
