@@ -60,8 +60,8 @@ public class ItemWandD extends Item {
 				MainRegistry.y++;
 			if (b == ModBlocks.block_beryllium)
 				MainRegistry.y--;
-			if (b == ModBlocks.ore_copper)
-				MainRegistry.z++;
+			//if (b == ModBlocks.ore_copper)
+			//	MainRegistry.z++;
 			if (b == ModBlocks.block_copper)
 				MainRegistry.z--;
 			if (b == ModBlocks.red_pylon) {
