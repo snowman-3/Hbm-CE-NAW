@@ -1015,14 +1015,14 @@ public class CraftingManager {
 			addShapelessAuto(new ItemStack(ModItems.ingot_semtex, 3), Items.SLIME_BALL, Blocks.TNT, KNO.dust() );
 			addShapelessAuto(new ItemStack(ModItems.canister_full, 1, Fluids.DIESEL.getID()), new ItemStack(ModItems.canister_full, 1, Fluids.OIL.getID()), REDSTONE.dust(), ModItems.canister_empty );
 
-			addShapelessAuto(new ItemStack(ModBlocks.ore_uranium, 1), ModBlocks.ore_uranium_scorched, Items.WATER_BUCKET );
-			addRecipeAuto(new ItemStack(ModBlocks.ore_uranium, 8), "OOO", "OBO", "OOO", 'O', ModBlocks.ore_uranium_scorched, 'B', Items.WATER_BUCKET );
+			//addShapelessAuto(new ItemStack(ModBlocks.ore_uranium, 1), ModBlocks.ore_uranium_scorched, Items.WATER_BUCKET );
+			//addRecipeAuto(new ItemStack(ModBlocks.ore_uranium, 8), "OOO", "OBO", "OOO", 'O', ModBlocks.ore_uranium_scorched, 'B', Items.WATER_BUCKET );
 			addShapelessAuto(new ItemStack(ModBlocks.ore_nether_uranium, 1), ModBlocks.ore_nether_uranium_scorched, Items.WATER_BUCKET );
 			addRecipeAuto(new ItemStack(ModBlocks.ore_nether_uranium, 8), "OOO", "OBO", "OOO", 'O', ModBlocks.ore_nether_uranium_scorched, 'B', Items.WATER_BUCKET );
 			addShapelessAuto(new ItemStack(ModBlocks.ore_gneiss_uranium, 1), ModBlocks.ore_gneiss_uranium_scorched, Items.WATER_BUCKET );
 			addRecipeAuto(new ItemStack(ModBlocks.ore_gneiss_uranium, 8), "OOO", "OBO", "OOO", 'O', ModBlocks.ore_gneiss_uranium_scorched, 'B', Items.WATER_BUCKET );
-			addShapelessAuto(new ItemStack(ModBlocks.ore_uranium, 1), ModBlocks.ore_sellafield_uranium_scorched, Items.WATER_BUCKET );
-			addRecipeAuto(new ItemStack(ModBlocks.ore_uranium, 8), "OOO", "OBO", "OOO", 'O', ModBlocks.ore_sellafield_uranium_scorched, 'B', Items.WATER_BUCKET );
+			//addShapelessAuto(new ItemStack(ModBlocks.ore_uranium, 1), ModBlocks.ore_sellafield_uranium_scorched, Items.WATER_BUCKET );
+			//addRecipeAuto(new ItemStack(ModBlocks.ore_uranium, 8), "OOO", "OBO", "OOO", 'O', ModBlocks.ore_sellafield_uranium_scorched, 'B', Items.WATER_BUCKET );
 
 			addRecipeAuto(new ItemStack(ModItems.plate_iron, 4), "##", "##", '#', IRON.ingot() );
 			addRecipeAuto(new ItemStack(ModItems.plate_gold, 4), "##", "##", '#', GOLD.ingot() );

@@ -424,11 +424,11 @@ public class OreDictManager {
         /*
          * RADIOACTIVE
          */
-        U.rad(HazardRegistry.u).nugget(nugget_uranium).billet(billet_uranium).crystal(crystal_uranium).ingot(ingot_uranium).dust(powder_uranium).block(block_uranium).ore(ore_uranium, ore_uranium_scorched, ore_gneiss_uranium, ore_gneiss_uranium_scorched, ore_nether_uranium, ore_nether_uranium_scorched, ore_sellafield_uranium_scorched).oreNether(ore_nether_uranium, ore_nether_uranium_scorched);
+        U.rad(HazardRegistry.u).nugget(nugget_uranium).billet(billet_uranium).crystal(crystal_uranium).ingot(ingot_uranium).dust(powder_uranium).block(block_uranium).ore(ore_gneiss_uranium, ore_gneiss_uranium_scorched, ore_nether_uranium, ore_nether_uranium_scorched, ore_sellafield_uranium_scorched).oreNether(ore_nether_uranium, ore_nether_uranium_scorched);
         U233.rad(HazardRegistry.u233).nugget(nugget_u233).billet(billet_u233).ingot(ingot_u233).block(block_u233);
         U235.rad(HazardRegistry.u235).nugget(nugget_u235).billet(billet_u235).ingot(ingot_u235).block(block_u235);
         U238.rad(HazardRegistry.u238).nugget(nugget_u238).billet(billet_u238).ingot(ingot_u238).block(block_u238);
-        TH232.rad(HazardRegistry.th232).nugget(nugget_th232).billet(billet_th232).crystal(crystal_thorium).ingot(ingot_th232).dust(powder_thorium).block(block_thorium).ore(ore_thorium);
+        TH232.rad(HazardRegistry.th232).nugget(nugget_th232).billet(billet_th232).crystal(crystal_thorium).ingot(ingot_th232).dust(powder_thorium).block(block_thorium);
         PU.rad(HazardRegistry.pu).nugget(nugget_plutonium).billet(billet_plutonium).crystal(crystal_plutonium).ingot(ingot_plutonium).dust(powder_plutonium).block(block_plutonium).ore(ore_nether_plutonium).oreNether(ore_nether_plutonium);
         PURG.rad(HazardRegistry.purg).nugget(nugget_pu_mix).billet(billet_pu_mix).ingot(ingot_pu_mix).block(block_pu_mix);
         PU238.rad(HazardRegistry.pu238).hot(3F).nugget(nugget_pu238).billet(billet_pu238).ingot(ingot_pu238).block(block_pu238);

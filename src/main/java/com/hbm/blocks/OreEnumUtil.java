@@ -79,10 +79,10 @@ public class OreEnumUtil {
         NEODYMIUM(() -> new ItemStack(fragment_neodymium), OreEnumUtil::base2Rand2Fortune),
         NITAN(() -> new ItemStack(powder_nitan_mix), OreEnumUtil::const1),
 
-        CLUSTER_IRON(() -> new ItemStack(crystal_iron), OreEnumUtil::vanillaFortune),
-        CLUSTER_TITANIUM(() -> new ItemStack(crystal_titanium), OreEnumUtil::vanillaFortune),
-        CLUSTER_ALUMINIUM(() -> new ItemStack(crystal_aluminium), OreEnumUtil::vanillaFortune),
-        CLUSTER_COPPER(() -> new ItemStack(crystal_copper), OreEnumUtil::vanillaFortune),
+        //CLUSTER_IRON(() -> new ItemStack(crystal_iron), OreEnumUtil::vanillaFortune),
+        //CLUSTER_TITANIUM(() -> new ItemStack(crystal_titanium), OreEnumUtil::vanillaFortune),
+        //CLUSTER_ALUMINIUM(() -> new ItemStack(crystal_aluminium), OreEnumUtil::vanillaFortune),
+        //CLUSTER_COPPER(() -> new ItemStack(crystal_copper), OreEnumUtil::vanillaFortune),
         CLUSTER_TUNGSTEN(() -> new ItemStack(crystal_tungsten), OreEnumUtil::vanillaFortune),
         ;
 

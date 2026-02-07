@@ -47,11 +47,11 @@ public class BlockOutgas extends BlockNTMOre {
     public Block getGas() {
 
         if (GeneralConfig.enableRadon) {
-            if (this == ModBlocks.ore_uranium || this == ModBlocks.ore_uranium_scorched ||
-                    this == ModBlocks.ore_gneiss_uranium || this == ModBlocks.ore_gneiss_uranium_scorched ||
-                    this == ModBlocks.ore_nether_uranium || this == ModBlocks.ore_nether_uranium_scorched) {
-                return ModBlocks.gas_radon;
-            }
+            //if (this == ModBlocks.ore_uranium || this == ModBlocks.ore_uranium_scorched ||
+            //        this == ModBlocks.ore_gneiss_uranium || this == ModBlocks.ore_gneiss_uranium_scorched ||
+            //        this == ModBlocks.ore_nether_uranium || this == ModBlocks.ore_nether_uranium_scorched) {
+            //    return ModBlocks.gas_radon;
+            //}
 
             if (this == ModBlocks.block_corium_cobble)
                 return ModBlocks.gas_radon_dense;

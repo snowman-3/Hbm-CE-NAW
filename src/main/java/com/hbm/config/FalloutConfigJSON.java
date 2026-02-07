@@ -253,16 +253,16 @@ public class FalloutConfigJSON {
                     .matchesBlock(ModBlocks.ore_beryllium)
                     .build());
 
-            if (m > 4) {
-                entries.add(FalloutEntry.builder()
-                        .addPrimary(ModBlocks.ore_sellafield_schrabidium.getStateFromMeta(m), 1)
-                        .addPrimary(ModBlocks.ore_sellafield_uranium_scorched.getStateFromMeta(m), 9)
-                        .max(i * 5)
-                        .opaque(true)
-                        .solid(true)
-                        .matchesBlock(ModBlocks.ore_uranium)
-                        .build());
-            }
+            //if (m > 4) {
+            //    entries.add(FalloutEntry.builder()
+            //            .addPrimary(ModBlocks.ore_sellafield_schrabidium.getStateFromMeta(m), 1)
+            //            .addPrimary(ModBlocks.ore_sellafield_uranium_scorched.getStateFromMeta(m), 9)
+            //            .max(i * 5)
+            //            .opaque(true)
+            //            .solid(true)
+            //            .matchesBlock(ModBlocks.ore_uranium)
+            //            .build());
+            //}
             if (m > 4) {
                 entries.add(FalloutEntry.builder()
                         .addPrimary(ModBlocks.ore_sellafield_schrabidium.getStateFromMeta(m), 1)
