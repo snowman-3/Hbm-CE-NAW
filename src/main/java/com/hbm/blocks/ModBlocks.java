@@ -993,8 +993,8 @@ public class ModBlocks {
 
     public static final Block machine_electrolyser = new MachineElectrolyser("machine_electrolyser").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab);
 
-
     public static final Block machine_autocrafter = new MachineAutocrafter(Material.IRON, "machine_autocrafter").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab);
+    public static final Block machine_funnel = new MachineFunnel("machine_funnel").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab);
 
     public static final Block anvil_iron = new NTMAnvil(Material.IRON, NTMAnvil.TIER_IRON, "anvil_iron").setCreativeTab(MainRegistry.machineTab);
     public static final Block anvil_lead = new NTMAnvil(Material.IRON, NTMAnvil.TIER_IRON, "anvil_lead").setCreativeTab(MainRegistry.machineTab);
@@ -1338,6 +1338,7 @@ public class ModBlocks {
     public static final Block machine_drain = new MachineDrain(Material.IRON, "machine_drain").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
     public static final Block radio_torch_sender = new RadioTorchSender("radio_torch_sender").setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
     public static final Block radio_torch_receiver = new RadioTorchReceiver("radio_torch_receiver").setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+    public static final Block radio_torch_counter = new RadioTorchCounter("radio_torch_counter").setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
     public static final Block radio_telex = new RadioTelex("radio_telex").setHardness(3F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 
     //Drillgon200: Removed, by order of lord Bob.

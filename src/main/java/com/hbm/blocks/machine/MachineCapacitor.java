@@ -110,8 +110,7 @@ public class MachineCapacitor extends BlockContainer implements ILookOverlay, IP
     }
 
     @Override
-    public void printHook(RenderGameOverlayEvent.Pre event, World world, int x, int y, int z) {
-        BlockPos pos = new BlockPos(x, y, z);
+    public void printHook(RenderGameOverlayEvent.Pre event, World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
 
         if(!(te instanceof TileEntityCapacitor))
@@ -132,7 +131,7 @@ public class MachineCapacitor extends BlockContainer implements ILookOverlay, IP
     }
 
     @Override
-    public void addInformation(ItemStack stack, NBTTagCompound persistentTag, EntityPlayer player, List list, boolean ext) {
+    public void addInformation(ItemStack stack, NBTTagCompound persistentTag, EntityPlayer player, List<String> list, boolean ext) {
         list.add(TextFormatting.GOLD + "Stores up to "+ BobMathUtil.getShortNumber(this.power) + "HE");
         list.add(TextFormatting.GOLD + "Charge speed: "+ BobMathUtil.getShortNumber(this.power / 200) + "HE");
         list.add(TextFormatting.GOLD + "Discharge speed: "+ BobMathUtil.getShortNumber(this.power / 600) + "HE");

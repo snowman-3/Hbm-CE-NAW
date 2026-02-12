@@ -126,7 +126,7 @@ public class MachineFluidTank extends BlockDummyable implements IPersistentInfoP
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, NBTTagCompound persistentTag, EntityPlayer player, List list, boolean ext) {
+	public void addInformation(ItemStack stack, NBTTagCompound persistentTag, EntityPlayer player, List<String> list, boolean ext) {
 		FluidTankNTM tank = new FluidTankNTM(Fluids.NONE, 0);
 		tank.readFromNBT(persistentTag, "tank");
 		list.add(TextFormatting.YELLOW + "" + tank.getFill() + "/" + tank.getMaxFill() + "mB " + tank.getTankType().getLocalizedName());
@@ -189,8 +189,8 @@ public class MachineFluidTank extends BlockDummyable implements IPersistentInfoP
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void printHook(RenderGameOverlayEvent.Pre event, World world, int x, int y, int z) {
-		IRepairable.addGenericOverlay(event, world, x, y, z, this);
+	public void printHook(RenderGameOverlayEvent.Pre event, World world, BlockPos pos) {
+		IRepairable.addGenericOverlay(event, world, pos.getX(), pos.getY(), pos.getZ(), this);
 	}
 	
 }
