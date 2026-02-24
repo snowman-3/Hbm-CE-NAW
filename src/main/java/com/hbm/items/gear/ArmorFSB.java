@@ -4,14 +4,13 @@ import com.hbm.config.PotionConfig;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.interfaces.NotableComments;
 import com.hbm.items.ModItems;
+import com.hbm.items.armor.IArmorDisableModel;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.loader.IModelCustom;
-import com.hbm.util.ContaminationUtil;
-import com.hbm.util.I18nUtil;
-import com.hbm.util.InventoryUtil;
-import com.hbm.util.ShadyUtil;
+import com.hbm.util.*;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -47,6 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 // mlbv: heads up! The original 1.7 version has almost all the methods expect a param of EntityPlayer.
@@ -54,7 +54,7 @@ import java.util.List;
 // by making them accept EntityLivingBase instead and moving update methods to onLivingUpdate.
 // This is hereby reverted by me since I'd rather trade compatibility for convenience.
 @NotableComments
-public class ArmorFSB extends ItemArmor {
+public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 
 
     public List<PotionEffect> effects = new ArrayList<>();
@@ -92,7 +92,7 @@ public class ArmorFSB extends ItemArmor {
 
             boolean noHelmet = chestplate.noHelmet;
 
-            for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+            for (EntityEquipmentSlot slot : EnumUtil.ENTITY_EQUIPMENT_SLOTS) {
                 if (slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND)
                     continue;
                 if (noHelmet && slot == EntityEquipmentSlot.HEAD)
@@ -132,7 +132,7 @@ public class ArmorFSB extends ItemArmor {
         if (!plate.isEmpty() && plate.getItem() instanceof ArmorFSB chestplate) {
             boolean noHelmet = chestplate.noHelmet;
 
-            for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+            for (EntityEquipmentSlot slot : EnumUtil.ENTITY_EQUIPMENT_SLOTS) {
                 if (slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND)
                     continue;
                 if (noHelmet && slot == EntityEquipmentSlot.HEAD)
@@ -149,6 +149,24 @@ public class ArmorFSB extends ItemArmor {
         }
 
         return false;
+    }
+
+    private final ReferenceOpenHashSet<EnumPlayerPart> hidden = new ReferenceOpenHashSet<>();
+    private boolean needsFullSet = false;
+
+    public ArmorFSB setHides(EnumPlayerPart... parts) {
+        Collections.addAll(hidden, parts);
+        return this;
+    }
+
+    public ArmorFSB setFullSetForHide() {
+        needsFullSet = true;
+        return this;
+    }
+
+    @Override
+    public boolean disablesPart(EntityPlayer player, ItemStack stack, EnumPlayerPart part) {
+        return hidden.contains(part) && (!needsFullSet || hasFSBArmorIgnoreCharge(player));
     }
 
     public void handleAttack(LivingAttackEvent event) {

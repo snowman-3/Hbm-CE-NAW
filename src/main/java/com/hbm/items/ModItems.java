@@ -65,7 +65,6 @@ import java.util.*;
 
 import static com.hbm.items.ItemEnums.*;
 import static com.hbm.items.weapon.ItemMissile.*;
-import static com.hbm.items.weapon.ItemMissile.FuelType.KEROSENE;
 
 public class ModItems {
 
@@ -446,7 +445,7 @@ public class ModItems {
     public static final Item hazmat_legs_grey = new ArmorHazmat(MaterialRegistry.aMatHaz3, -1, EntityEquipmentSlot.LEGS, "hazmat_legs_grey").setMaxStackSize(1);
     public static final Item hazmat_boots_grey = new ArmorHazmat(MaterialRegistry.aMatHaz3, -1, EntityEquipmentSlot.FEET, "hazmat_boots_grey").setMaxStackSize(1);
     public static final Item liquidator_helmet = new ArmorLiquidator(MaterialRegistry.aMatLiquidator, -1, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/liquidator_helmet.png", "liquidator_helmet")
-            .setStep(HBMSoundHandler.iron)
+            .setStep(HBMSoundHandler.metalStep)
             .setJump(HBMSoundHandler.ironJump)
             .setFall(HBMSoundHandler.ironLand).setMaxStackSize(1);
     public static final Item liquidator_plate = new ArmorLiquidator(MaterialRegistry.aMatLiquidator, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/liquidator_1.png", "liquidator_plate").cloneStats((ArmorFSB) liquidator_helmet).setMaxStackSize(1);
@@ -534,7 +533,8 @@ public class ModItems {
             .setHasGeigerSound(true)
             .setHasHardLanding(true)
             .addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
-            .setStep(HBMSoundHandler.iron)
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
+            .setStep(HBMSoundHandler.metalStep)
             .setJump(HBMSoundHandler.ironJump)
             .setFall(HBMSoundHandler.ironLand);
     public static final Item t51_plate = new ArmorT51(MaterialRegistry.enumArmorMaterialT51, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 1000000, 10000, 1000, 5, "t51_plate").cloneStats((ArmorFSB) t51_helmet).setCreativeTab(CreativeTabs.COMBAT);
@@ -543,6 +543,7 @@ public class ModItems {
     public static final Item steamsuit_helmet = new ArmorDesh(MaterialRegistry.aMatSteamsuit, 7, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", Fluids.STEAM, 64000, 500, 50, 1, "steamsuit_helmet")
             .addEffect(new PotionEffect(MobEffects.HASTE, 30, 0))
             .setHasHardLanding(true)
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
             .setStep(HBMSoundHandler.iron) //Norwood: Upstream doesn't have it but i'll allow it
             .setJump(HBMSoundHandler.ironJump)
             .setFall(HBMSoundHandler.ironLand);
@@ -550,6 +551,7 @@ public class ModItems {
     public static final Item steamsuit_legs = new ArmorDesh(MaterialRegistry.aMatSteamsuit, 7, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", Fluids.STEAM, 64000, 500, 50, 1, "steamsuit_legs").cloneStats((ArmorFSB) steamsuit_helmet);
     public static final Item steamsuit_boots = new ArmorDesh(MaterialRegistry.aMatSteamsuit, 7, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", Fluids.STEAM, 64000, 500, 50, 1, "steamsuit_boots").cloneStats((ArmorFSB) steamsuit_helmet);
     public static final Item trenchmaster_helmet = new ArmorTrenchmaster(MaterialRegistry.aMatTrench, -1, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", "trenchmaster_helmet")
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
             .addEffect(new PotionEffect(MobEffects.HASTE, 20, 1))
             .addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 2))
             .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 1))
@@ -558,29 +560,32 @@ public class ModItems {
     public static final Item trenchmaster_legs = new ArmorTrenchmaster(MaterialRegistry.aMatTrench, -1, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", "trenchmaster_legs").cloneStats((ArmorFSB) trenchmaster_helmet).setMaxStackSize(1);
     public static final Item trenchmaster_boots = new ArmorTrenchmaster(MaterialRegistry.aMatTrench, -1, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", "trenchmaster_boots").cloneStats((ArmorFSB) trenchmaster_helmet).setMaxStackSize(1);
     public static final Item taurun_helmet = new ArmorTaurun(MaterialRegistry.aMatTaurun, -1, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", "taurun_helmet")
-            .addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0));
+            .addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT);
     public static final Item taurun_plate = new ArmorTaurun(MaterialRegistry.aMatTaurun, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", "taurun_plate").cloneStats((ArmorFSB) taurun_helmet).setMaxStackSize(1);
     public static final Item taurun_legs = new ArmorTaurun(MaterialRegistry.aMatTaurun, -1, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", "taurun_legs").cloneStats((ArmorFSB) taurun_helmet).setMaxStackSize(1);
 
     public static final Item taurun_boots = new ArmorTaurun(MaterialRegistry.aMatTaurun, -1, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", "taurun_boots").cloneStats((ArmorFSB) taurun_helmet).setMaxStackSize(1);
     public static final Item bismuth_helmet = new ArmorBismuth(MaterialRegistry.aMatBismuth, -1, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", "bismuth_helmet")
-            .addEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20, 0))
+            .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 6))
+            .addEffect(new PotionEffect(MobEffects.SPEED, 20, 6))
             .addEffect(new PotionEffect(MobEffects.REGENERATION, 20, 1))
-            .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
-            .addEffect(new PotionEffect(MobEffects.SPEED, 20, 0))
+            .addEffect(new PotionEffect(MobEffects.NIGHT_VISION, 15 * 20, 0))
             .setDashCount(3);
     public static final Item bismuth_plate = new ArmorBismuth(MaterialRegistry.aMatBismuth, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", "bismuth_plate").cloneStats((ArmorFSB) bismuth_helmet).setMaxStackSize(1);
     public static final Item bismuth_legs = new ArmorBismuth(MaterialRegistry.aMatBismuth, -1, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", "bismuth_legs").cloneStats((ArmorFSB) bismuth_helmet).setMaxStackSize(1);
     public static final Item bismuth_boots = new ArmorBismuth(MaterialRegistry.aMatBismuth, -1, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", "bismuth_boots").cloneStats((ArmorFSB) bismuth_helmet).setMaxStackSize(1);
     public static final Item envsuit_helmet = new ArmorEnvsuit(MaterialRegistry.aMatEnvsuit, 7, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", 100000, 1000, 250, 0, "envsuit_helmet")
             .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
-            .addEffect(new PotionEffect(MobEffects.SPEED, 30, 1));
+            .addEffect(new PotionEffect(MobEffects.SPEED, 30, 1))
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT);
     public static final Item envsuit_plate = new ArmorEnvsuit(MaterialRegistry.aMatEnvsuit, 7, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 100000, 1000, 250, 0, "envsuit_plate").cloneStats((ArmorFSB) envsuit_helmet);
     public static final Item envsuit_legs = new ArmorEnvsuit(MaterialRegistry.aMatEnvsuit, 7, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", 100000, 1000, 250, 0, "envsuit_legs").cloneStats((ArmorFSB) envsuit_helmet);
     public static final Item envsuit_boots = new ArmorEnvsuit(MaterialRegistry.aMatEnvsuit, 7, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", 100000, 1000, 250, 0, "envsuit_boots").cloneStats((ArmorFSB) envsuit_helmet);
     public static final Item dieselsuit_helmet = new ArmorDiesel(MaterialRegistry.aMatDieselsuit, 7, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", Fluids.DIESEL, 64000, 500, 50, 1, "dieselsuit_helmet")
             .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 2))
-            .addEffect(new PotionEffect(MobEffects.SPEED, 30, 2));
+            .addEffect(new PotionEffect(MobEffects.SPEED, 30, 2))
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT);
     public static final Item dieselsuit_plate = new ArmorDiesel(MaterialRegistry.aMatDieselsuit, 7, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", Fluids.DIESEL, 64000, 500, 50, 1, "dieselsuit_plate").cloneStats((ArmorFSB) dieselsuit_helmet);
     public static final Item dieselsuit_legs = new ArmorDiesel(MaterialRegistry.aMatDieselsuit, 7, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", Fluids.DIESEL, 64000, 500, 50, 1, "dieselsuit_legs").cloneStats((ArmorFSB) dieselsuit_helmet);
     public static final Item dieselsuit_boots = new ArmorDiesel(MaterialRegistry.aMatDieselsuit, 7, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", Fluids.DIESEL, 64000, 500, 50, 1, "dieselsuit_boots").cloneStats((ArmorFSB) dieselsuit_helmet);
@@ -590,7 +595,8 @@ public class ModItems {
             .setHasHardLanding(true)
             .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
             .addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 0))
-            .setStep(HBMSoundHandler.iron)
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
+            .setStep(HBMSoundHandler.metalStep)
             .setJump(HBMSoundHandler.ironJump)
             .setFall(HBMSoundHandler.ironLand);
     public static final Item ajr_plate = new ArmorAJR(MaterialRegistry.aMatAJR, 7, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajr_plate").cloneStats((ArmorFSB) ajr_helmet);
@@ -602,7 +608,8 @@ public class ModItems {
             .setHasHardLanding(true)
             .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
             .addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 0))
-            .setStep(HBMSoundHandler.iron)
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
+            .setStep(HBMSoundHandler.metalStep)
             .setJump(HBMSoundHandler.ironJump)
             .setFall(HBMSoundHandler.ironLand);
     public static final Item ajro_plate = new ArmorAJRO(MaterialRegistry.aMatAJR, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajro_plate").cloneStats((ArmorFSB) ajro_helmet);
@@ -611,6 +618,7 @@ public class ModItems {
     public static final Item hev_helmet = new ArmorHEV(MaterialRegistry.aMatHEV, 7, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", 1000000, 10000, 2500, 0, "hev_helmet")
             .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
             .addEffect(new PotionEffect(MobEffects.SPEED, 30, 1))
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
             .setHasGeigerSound(true)
             .setHasCustomGeiger(true);
     public static final Item hev_plate = new ArmorHEV(MaterialRegistry.aMatHEV, 7, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 1000000, 10000, 2500, 0, "hev_plate").cloneStats((ArmorFSB) hev_helmet);
@@ -625,7 +633,7 @@ public class ModItems {
             .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
             .addEffect(new PotionEffect(MobEffects.SATURATION, 30, 0))
             .addEffect(new PotionEffect(HbmPotion.radx, 30, 0))
-            .setStep(HBMSoundHandler.iron)
+            .setStep(HBMSoundHandler.metalStep)
             .setJump(HBMSoundHandler.ironJump)
             .setFall(HBMSoundHandler.ironLand);
     public static final Item bj_plate = new ArmorBJ(MaterialRegistry.aMatBJ, 7, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 10000000, 10000, 1000, 100, "bj_plate").cloneStats((ArmorFSB) bj_helmet);
@@ -636,6 +644,7 @@ public class ModItems {
             .enableVATS(true)
             .setHasGeigerSound(true)
             .setHasHardLanding(true)
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
             .setStep(HBMSoundHandler.poweredStep)
             .setJump(HBMSoundHandler.poweredStep)
             .setFall(HBMSoundHandler.poweredStep)
@@ -643,26 +652,40 @@ public class ModItems {
     public static final Item rpa_plate = new ArmorRPA(MaterialRegistry.aMatRPA, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 10000, 25, "RPA_plate").cloneStats((ArmorFSB) rpa_helmet);
     public static final Item rpa_legs = new ArmorRPA(MaterialRegistry.aMatRPA, -1, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", 2500000, 10000, 10000, 25, "RPA_legs").cloneStats((ArmorFSB) rpa_helmet);
     public static final Item rpa_boots = new ArmorRPA(MaterialRegistry.aMatRPA, -1, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 10000, 25, "RPA_boots").cloneStats((ArmorFSB) rpa_helmet);
+    public static final Item ncrpa_helmet = new ArmorNCRPA(MaterialRegistry.aMatAJR, -1, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ncrpa_helmet")
+				.enableVATS(true)
+				.setHasGeigerSound(true)
+				.setHasHardLanding(true)
+				.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 3))
+            .setStep(HBMSoundHandler.poweredStep)
+				.setJump(HBMSoundHandler.poweredStep)
+				.setFall(HBMSoundHandler.poweredStep)
+				.setHides(IArmorDisableModel.EnumPlayerPart.HAT);
+    public static final Item ncrpa_plate = new ArmorNCRPA(MaterialRegistry.aMatAJR, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ncrpa_plate").cloneStats((ArmorFSB) rpa_helmet);
+    public static final Item ncrpa_legs = new ArmorNCRPA(MaterialRegistry.aMatAJR, -1, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", 2500000, 10000, 2000, 25, "ncrpa_legs").cloneStats((ArmorFSB) rpa_helmet);
+    public static final Item ncrpa_boots = new ArmorNCRPA(MaterialRegistry.aMatAJR, -1, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ncrpa_boots").cloneStats((ArmorFSB) rpa_helmet);
     public static final Item fau_helmet = new ArmorDigamma(MaterialRegistry.aMatFau, -1, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", 10000000, 100000, 25000, 1000, "fau_helmet")
             .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 1))
             .setHasGeigerSound(true)
             .enableThermalSight(true)
             .setHasHardLanding(true)
-            .setStep(HBMSoundHandler.iron)
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
+            .setStep(HBMSoundHandler.metalStep)
             .setJump(HBMSoundHandler.ironJump)
             .setFall(HBMSoundHandler.ironLand);
-    public static final Item fau_plate = new ArmorDigamma(MaterialRegistry.aMatFau, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 10000000, 100000, 25000, 1000, "fau_plate").cloneStats((ArmorFSB) fau_helmet);
-    public static final Item fau_legs = new ArmorDigamma(MaterialRegistry.aMatFau, -1, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", 10000000, 100000, 25000, 1000, "fau_legs").cloneStats((ArmorFSB) fau_helmet);
+    public static final Item fau_plate = new ArmorDigamma(MaterialRegistry.aMatFau, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 10000000, 100000, 25000, 1000, "fau_plate").cloneStats((ArmorFSB) fau_helmet).setFullSetForHide();
+    public static final Item fau_legs = new ArmorDigamma(MaterialRegistry.aMatFau, -1, EntityEquipmentSlot.LEGS, Tags.MODID + ":textures/armor/starmetal_2.png", 10000000, 100000, 25000, 1000, "fau_legs").cloneStats((ArmorFSB) fau_helmet).setHides(IArmorDisableModel.EnumPlayerPart.LEFT_LEG, IArmorDisableModel.EnumPlayerPart.RIGHT_LEG).setFullSetForHide();
     public static final Item fau_boots = new ArmorDigamma(MaterialRegistry.aMatFau, -1, EntityEquipmentSlot.FEET, Tags.MODID + ":textures/armor/starmetal_1.png", 10000000, 100000, 25000, 1000, "fau_boots").cloneStats((ArmorFSB) fau_helmet);
     public static final Item dns_helmet = new ArmorDNT(MaterialRegistry.aMatDNS, -1, EntityEquipmentSlot.HEAD, Tags.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 115, "dns_helmet")
-            .addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 9))
-            .addEffect(new PotionEffect(MobEffects.HASTE, 30, 7))
-            .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 2))
+            .addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 9))
+            .addEffect(new PotionEffect(MobEffects.HASTE, 20, 7))
+            .addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 2))
             .setHasGeigerSound(true)
             .enableVATS(true)
             .enableThermalSight(true)
             .setHasHardLanding(true)
-            .setStep(HBMSoundHandler.iron)
+            .setHides(IArmorDisableModel.EnumPlayerPart.HAT)
+            .setStep(HBMSoundHandler.metalStep)
             .setJump(HBMSoundHandler.ironJump)
             .setFall(HBMSoundHandler.ironLand);
     public static final Item dns_plate = new ArmorDNT(MaterialRegistry.aMatDNS, -1, EntityEquipmentSlot.CHEST, Tags.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 115, "dns_plate").cloneStats((ArmorFSB) dns_helmet);
@@ -1106,7 +1129,7 @@ public class ModItems {
     public static final Item nuclear_waste_tiny = new ItemCustomLore("nuclear_waste_tiny").setCreativeTab(MainRegistry.partsTab);
     public static final Item nuclear_waste_vitrified = new ItemCustomLore("nuclear_waste_vitrified").setCreativeTab(MainRegistry.partsTab);
     public static final Item nuclear_waste_vitrified_tiny = new ItemCustomLore("nuclear_waste_vitrified_tiny").setCreativeTab(MainRegistry.partsTab);
-    public static final Item scrap_plastic = new ItemEnumMulti<>("scrap_plastic", ScrapType.VALUES, false, "scrap_plastic").setCreativeTab(null);
+    public static final Item scrap_plastic = new ItemBakedBase("scrap_plastic").setCreativeTab(null);
     public static final Item scrap = new ItemBase("scrap").setCreativeTab(MainRegistry.partsTab);
     public static final Item scrap_oil = new ItemBase("scrap_oil").setCreativeTab(MainRegistry.partsTab);
     public static final Item scrap_nuclear = new ItemBakedBase("scrap_nuclear").setCreativeTab(MainRegistry.partsTab);
@@ -1895,6 +1918,9 @@ public class ModItems {
     public static Item gun_charge_thrower;
     public static Item gun_drill;
     public static Item gun_fireext;
+
+    public static Item gun_pa_melee;
+    public static Item gun_pa_ranged;
 
     public static Item weapon_mod_test;
     public static Item weapon_mod_generic;

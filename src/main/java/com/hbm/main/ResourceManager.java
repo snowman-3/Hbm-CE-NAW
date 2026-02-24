@@ -284,12 +284,13 @@ public class ResourceManager {
     public static final IModelCustom armor_ajr = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/AJR.obj")).asVBO();
     public static final IModelCustom armor_steamsuit = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/steamsuit.obj")).asVBO();
     public static final IModelCustom armor_dieselsuit = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/bnuuy.obj")).asVBO();
+    public static final IModelCustom armor_remnant = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/remnant.obj")).asVBO();
+    public static final IModelCustom armor_ncr = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/ncrpa.obj")).asVBO();
     public static final IModelCustom armor_trenchmaster = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/trenchmaster.obj")).asVBO();
     public static final IModelCustom armor_t51 = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/t51.obj")).asVBO();
     public static final IModelCustom armor_taurun = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/taurun.obj")).asVBO();
     public static final IModelCustom armor_bismuth = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/bismuth.obj")).asVBO();
     public static final IModelCustom armor_envsuit = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/envsuit.obj")).asVBO();
-    public static final IModelCustom armor_RPA = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/rpa.obj")).asVBO();
     public static final IModelCustom armor_fau = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/fau.obj")).asVBO();
     public static final IModelCustom armor_dnt = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/dnt.obj")).asVBO();
     public static final IModelCustom armor_mod_tesla = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/armor/mod_tesla.obj")).asVBO();
@@ -428,6 +429,7 @@ public class ResourceManager {
     //Large Turbine
     public static final IModelCustom steam_engine = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/machines/steam_engine.obj")).asVBO();
     public static final IModelCustom turbine = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/machines/turbine.obj")).asVBO();
+    public static final IModelCustom industrial_turbine = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/machines/industrial_turbine.obj")).asVBO();
     public static final IModelCustom chungus = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/machines/chungus.obj")).asVBO();
     //Cooling Tower
     public static final IModelCustom tower_small = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/machines/tower_small.obj")).asVBO();
@@ -840,6 +842,7 @@ public class ResourceManager {
     //Large Turbine
     public static final ResourceLocation steam_engine_tex = new ResourceLocation(Tags.MODID, "textures/models/machines/steam_engine.png");
     public static final ResourceLocation turbine_tex = new ResourceLocation(Tags.MODID, "textures/models/machines/turbine.png");
+    public static final ResourceLocation industrial_turbine_tex = new ResourceLocation(Tags.MODID, "textures/models/machines/industrial_turbine.png");
     public static final ResourceLocation chungus_tex = new ResourceLocation(Tags.MODID, "textures/models/machines/chungus.png");
     //Cooling Tower
     public static final ResourceLocation tower_small_tex = new ResourceLocation(Tags.MODID, "textures/models/machines/tower_small.png");
@@ -1245,10 +1248,6 @@ public class ResourceManager {
     public static final ResourceLocation taurun_leg = new ResourceLocation(Tags.MODID, "textures/armor/taurun_leg.png");
     public static final ResourceLocation taurun_chest = new ResourceLocation(Tags.MODID, "textures/armor/taurun_chest.png");
     public static final ResourceLocation taurun_arm = new ResourceLocation(Tags.MODID, "textures/armor/taurun_arm.png");
-    public static final ResourceLocation bismuth_helmet = new ResourceLocation(Tags.MODID, "textures/armor/bismuth.png");
-    public static final ResourceLocation bismuth_leg = new ResourceLocation(Tags.MODID, "textures/armor/bismuth.png");
-    public static final ResourceLocation bismuth_chest = new ResourceLocation(Tags.MODID, "textures/armor/bismuth.png");
-    public static final ResourceLocation bismuth_arm = new ResourceLocation(Tags.MODID, "textures/armor/bismuth.png");
     public static final ResourceLocation envsuit_helmet = new ResourceLocation(Tags.MODID, "textures/armor/envsuit_helmet.png");
     public static final ResourceLocation envsuit_leg = new ResourceLocation(Tags.MODID, "textures/armor/envsuit_leg.png");
     public static final ResourceLocation envsuit_chest = new ResourceLocation(Tags.MODID, "textures/armor/envsuit_chest.png");
@@ -1261,10 +1260,17 @@ public class ResourceManager {
     public static final ResourceLocation ajro_leg = new ResourceLocation(Tags.MODID, "textures/armor/ajro_leg.png");
     public static final ResourceLocation ajro_chest = new ResourceLocation(Tags.MODID, "textures/armor/ajro_chest.png");
     public static final ResourceLocation ajro_arm = new ResourceLocation(Tags.MODID, "textures/armor/ajro_arm.png");
+
     public static final ResourceLocation rpa_helmet = new ResourceLocation(Tags.MODID, "textures/armor/rpa_helmet.png");
     public static final ResourceLocation rpa_leg = new ResourceLocation(Tags.MODID, "textures/armor/rpa_leg.png");
     public static final ResourceLocation rpa_chest = new ResourceLocation(Tags.MODID, "textures/armor/rpa_chest.png");
     public static final ResourceLocation rpa_arm = new ResourceLocation(Tags.MODID, "textures/armor/rpa_arm.png");
+
+    public static final ResourceLocation ncrpa_helmet = new ResourceLocation(Tags.MODID, "textures/armor/ncrpa_helmet.png");
+    public static final ResourceLocation ncrpa_leg = new ResourceLocation(Tags.MODID, "textures/armor/ncrpa_leg.png");
+    public static final ResourceLocation ncrpa_chest = new ResourceLocation(Tags.MODID, "textures/armor/ncrpa_chest.png");
+    public static final ResourceLocation ncrpa_arm = new ResourceLocation(Tags.MODID, "textures/armor/ncrpa_arm.png");
+
     public static final ResourceLocation fau_helmet = new ResourceLocation(Tags.MODID, "textures/armor/fau_helmet.png");
     public static final ResourceLocation fau_leg = new ResourceLocation(Tags.MODID, "textures/armor/fau_leg.png");
     public static final ResourceLocation fau_chest = new ResourceLocation(Tags.MODID, "textures/armor/fau_chest.png");
@@ -1279,6 +1285,7 @@ public class ResourceManager {
     public static final ResourceLocation no9_insignia = new ResourceLocation(Tags.MODID, "textures/armor/no9_insignia.png");
     public static final ResourceLocation goggles = new ResourceLocation(Tags.MODID, "textures/armor/goggle_glasses.png");
     public static final ResourceLocation mod_tesla = new ResourceLocation(Tags.MODID, "textures/armor/mod_tesla.png");
+    public static final ResourceLocation armor_bismuth_tex = new ResourceLocation(Tags.MODID, "textures/armor/bismuth.png");
     public static final ResourceLocation wings_murk = new ResourceLocation(Tags.MODID, "textures/armor/wings_murk.png");
     public static final ResourceLocation wings_bob = new ResourceLocation(Tags.MODID, "textures/armor/wings_bob.png");
     /// /Texture Entities
