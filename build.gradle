@@ -1362,16 +1362,6 @@ if (customMavenPublishUrl) {
     afterEvaluate {
         String publishedVersion = modVersion
         String baseVersion = System.getenv('RELEASE_VERSION') ?: publishedVersion
-
-        // Java 25 version formatting:
-        //   1.2.3.4           -> 1.2.3.4-java25
-        //   1.2.3.4-SNAPSHOT  -> 1.2.3.4-java25-SNAPSHOT
-        String java25Version
-        if (baseVersion.endsWith("-SNAPSHOT")) {
-            java25Version = baseVersion.substring(0, baseVersion.length() - "-SNAPSHOT".length()) + "-java25-SNAPSHOT"
-        } else {
-            java25Version = baseVersion + "-java25"
-        }
         def java25DevJarTask = tasks.named(usesShadowedDependencies.toBoolean() ? "shadowJarJava25" : "jarJava25")
 
         publishing {
@@ -1383,27 +1373,12 @@ if (customMavenPublishUrl) {
                     if (apiPackage) {
                         artifact apiJar
                     }
+                    artifact(java25DevJarTask)
 
                     // providers is not available here, use System for getting env vars
                     groupId = System.getenv('ARTIFACT_GROUP_ID') ?: project.mavenArtifactGroup
                     artifactId = System.getenv('ARTIFACT_ID') ?: project.modArchivesBaseName
                     version = baseVersion
-                }
-
-                create('mavenJava25', MavenPublication) {
-                    from components.java
-
-                    groupId = System.getenv('ARTIFACT_GROUP_ID') ?: project.mavenArtifactGroup
-                    artifactId = System.getenv('ARTIFACT_ID') ?: project.modArchivesBaseName
-                    version = java25Version
-                    artifacts.clear()
-                    artifact(java25DevJarTask)
-                    if (!noPublishedSources.toBoolean() && tasks.findByName("sourcesJar") != null) {
-                        artifact(tasks.sourcesJar)
-                    }
-                    if (apiPackage) {
-                        artifact apiJar
-                    }
                 }
             }
 

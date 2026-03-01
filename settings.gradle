@@ -32,5 +32,4 @@ blowdryerSetup {
 }
 
 include 'processor'
-include 'api'
 rootProject.name = rootProject.projectDir.getName()
