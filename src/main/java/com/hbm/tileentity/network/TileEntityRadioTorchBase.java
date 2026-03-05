@@ -107,11 +107,14 @@ public class TileEntityRadioTorchBase extends TileEntity implements IBufPacketRe
 
     @Override
     public @NotNull NBTTagCompound getUpdateTag() {
-        return writeToNBT(super.getUpdateTag());
+        NBTTagCompound nbt = super.getUpdateTag();
+        writeToNBT(nbt);
+        return nbt;
     }
 
     @Override
     public void handleUpdateTag(@NotNull NBTTagCompound tag) {
+        super.handleUpdateTag(tag);
         readFromNBT(tag);
     }
 
@@ -119,13 +122,18 @@ public class TileEntityRadioTorchBase extends TileEntity implements IBufPacketRe
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbt = new NBTTagCompound();
-        writeToNBT(nbt);
+        nbt.setByte("lastState", (byte) this.lastState);
         return new SPacketUpdateTileEntity(this.pos, 0, nbt);
     }
 
     @Override
     public void onDataPacket(@NotNull NetworkManager net, SPacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.getNbtCompound());
+        int lastState = this.lastState;
+        this.lastState = pkt.getNbtCompound().getByte("lastState");
+        if(this.lastState != lastState) {
+            IBlockState state = world.getBlockState(getPos());
+            world.notifyBlockUpdate(getPos(), state, state, 3);
+        }
     }
 
 	@Override
