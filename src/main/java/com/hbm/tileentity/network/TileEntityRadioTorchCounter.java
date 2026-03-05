@@ -1,7 +1,7 @@
 package com.hbm.tileentity.network;
 
+import com.hbm.blocks.network.RadioTorchBase;
 import com.hbm.interfaces.AutoRegister;
-import com.hbm.lib.ForgeDirection;
 import com.hbm.modules.ModulePatternMatcher;
 import com.hbm.tileentity.IControlReceiverFilter;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -12,8 +12,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.NotNull;
 
 @AutoRegister
@@ -44,9 +46,9 @@ public class TileEntityRadioTorchCounter extends TileEntityMachineBase implement
     public void update() {
 
         if(!world.isRemote) {
-            ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+            EnumFacing dir = getTorchFacing().getOpposite();
 
-            TileEntity tile = Compat.getTileStandard(world, pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ);
+            TileEntity tile = Compat.getTileStandard(world, pos.getX() + dir.getXOffset(), pos.getY() + dir.getYOffset(), pos.getZ() + dir.getZOffset());
             if(tile instanceof IInventory inv) {
                 ItemStack[] invSlots = new ItemStack[inv.getSizeInventory()];
                 for(int i = 0; i < invSlots.length; i++) invSlots[i] = inv.getStackInSlot(i);
@@ -141,5 +143,18 @@ public class TileEntityRadioTorchCounter extends TileEntityMachineBase implement
     @Override
     public int[] getFilterSlots() {
         return new int[]{0, inventory.getSlots()};
+    }
+
+    private @NotNull EnumFacing getTorchFacing() {
+        IBlockState state = world.getBlockState(pos);
+        if (state.getBlock() instanceof RadioTorchBase) {
+            return state.getValue(RadioTorchBase.FACING);
+        }
+
+        int meta = this.getBlockMetadata();
+        if (meta > 5) {
+            meta >>= 1;
+        }
+        return EnumFacing.byIndex(meta);
     }
 }

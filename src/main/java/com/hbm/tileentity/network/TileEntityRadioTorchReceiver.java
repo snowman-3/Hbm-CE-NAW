@@ -59,7 +59,7 @@ public class TileEntityRadioTorchReceiver extends TileEntityRadioTorchBase imple
 
           if (this.lastState != nextState) {
             this.lastState = nextState;
-            EnumFacing dir = EnumFacing.byIndex(this.getBlockMetadata());
+            EnumFacing dir = getTorchFacing();
             BlockPos strongPos =
                 new BlockPos(
                     pos.getX() + dir.getXOffset(),

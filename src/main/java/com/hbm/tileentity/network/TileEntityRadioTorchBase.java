@@ -1,5 +1,6 @@
 package com.hbm.tileentity.network;
 
+import com.hbm.blocks.network.RadioTorchBase;
 import com.hbm.handler.CompatHandler;
 import com.hbm.handler.threading.PacketThreading;
 import com.hbm.interfaces.IControlReceiver;
@@ -11,11 +12,13 @@ import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -47,6 +50,21 @@ public class TileEntityRadioTorchBase extends TileEntity implements IBufPacketRe
 			networkPackNT(50);
 		}
 	}
+
+    protected @NotNull EnumFacing getTorchFacing() {
+        if (world != null) {
+            IBlockState state = world.getBlockState(pos);
+            if (state.getBlock() instanceof RadioTorchBase) {
+                return state.getValue(RadioTorchBase.FACING);
+            }
+        }
+
+        int meta = this.getBlockMetadata();
+        if (meta > 5) {
+            meta >>= 1;
+        }
+        return EnumFacing.byIndex(meta);
+    }
 
 	@Override
 	public void readFromNBT(@NotNull NBTTagCompound nbt) {
