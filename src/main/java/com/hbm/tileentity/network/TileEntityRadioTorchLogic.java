@@ -13,7 +13,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,10 +54,10 @@ public class TileEntityRadioTorchLogic extends TileEntityLoadedBase implements I
     public static final int MAPPING_SIZE = 16;
 
     public TileEntityRadioTorchLogic() {
-        this.mapping = new String[16];
-        for (int i = 0; i < 16; i++) this.mapping[i] = "";
-        this.conditions = new int[16];
-        for (int i = 0; i < 16; i++) this.conditions[i] = 0;
+        this.mapping = new String[MAPPING_SIZE];
+        for (int i = 0; i < MAPPING_SIZE; i++) this.mapping[i] = "";
+        this.conditions = new int[MAPPING_SIZE];
+        for (int i = 0; i < MAPPING_SIZE; i++) this.conditions[i] = 0;
     }
 
     @Override
@@ -133,7 +132,6 @@ public class TileEntityRadioTorchLogic extends TileEntityLoadedBase implements I
             } catch (Exception x) {
                 return false; //not a valid input; skip! slightly annoying about the mapping but we'll restrict input anyway
             }
-            ;
 
             return switch (conditions[index]) {
                 case 1 -> sig <= map;
@@ -224,7 +222,7 @@ public class TileEntityRadioTorchLogic extends TileEntityLoadedBase implements I
 
     @Override
     public boolean hasPermission(EntityPlayer player) {
-        return new Vec3d(pos.getX() - player.posX, pos.getY() - player.posY, pos.getZ() - player.posZ).length() < 16;
+        return player.getDistanceSq(pos) < 16;
     }
 
     @Override
