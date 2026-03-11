@@ -819,7 +819,7 @@ public class ModBlocks {
 
     public static final Block silo_hatch_drillgon = new BlockSiloHatch(Material.IRON, "silo_hatch_drillgon").setHardness(10.0F).setResistance(2000.0F).setCreativeTab(MainRegistry.machineTab);
 
-    public static final Block vault_door = new VaultDoor(Material.IRON, "vault_door").setHardness(500.0F).setResistance(1000.0F).setCreativeTab(MainRegistry.machineTab);
+    public static final Block vault_door = new BlockDoorGeneric(Material.IRON, DoorDecl.VAULT_DOOR, true, "vault_door").setHardness(500.0F).setResistance(1000.0F).setCreativeTab(MainRegistry.machineTab);
     public static final Block blast_door = new BlastDoor(Material.IRON, "blast_door").setHardness(250.0F).setResistance(1000.0F).setCreativeTab(MainRegistry.machineTab);
     public static final Block sliding_blast_door = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door").setHardness(150.0F).setResistance(750.0F).setCreativeTab(MainRegistry.machineTab);
     public static final Block sliding_blast_door_2 = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door_2").setHardness(150.0F).setResistance(750.0F).setCreativeTab(MainRegistry.machineTab);

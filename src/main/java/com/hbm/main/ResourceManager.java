@@ -1052,6 +1052,19 @@ public class ResourceManager {
     public static final ResourceLocation secure_access_door_tex = new ResourceLocation(Tags.MODID, "textures/models/doors/secure_access_door.png");
     public static final ResourceLocation sliding_seal_door_tex = new ResourceLocation(Tags.MODID, "textures/models/doors/sliding_seal_door.png");
     public static final ResourceLocation sliding_gate_door_tex = new ResourceLocation(Tags.MODID, "textures/models/doors/sliding_gate_door.png");
+
+    //PheoDoors
+    public static IModelCustomNamed pheo_fire_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/fire_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_airlock_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/airlock_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_blast_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/blast_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_containment_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/containment_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_seal_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/seal_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_secure_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/secure_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_sliding_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/sliding_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_vehicle_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/vehicle_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_water_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/water_door.obj")).asVBO();
+    public static IModelCustomNamed pheo_vault_door = new HFRWavefrontObject(new ResourceLocation(Tags.MODID, "models/pheodoors/vault_door.obj")).asVBO();
+
     //Silo hatch
     public static final ResourceLocation hatch_tex = new ResourceLocation(Tags.MODID, "textures/models/doors/hatchtexture.png");
     //Lantern
@@ -1314,7 +1327,7 @@ public class ResourceManager {
     public static final ResourceLocation duchessgambit_tex = new ResourceLocation(Tags.MODID, "textures/models/misc/duchessgambit.png");
     public static final ResourceLocation building_tex = new ResourceLocation(Tags.MODID, "textures/models/weapons/building.png");
     public static final ResourceLocation torpedo_tex = new ResourceLocation(Tags.MODID, "textures/models/weapons/torpedo.png");
-    //public static final ResourceLocation wings_solstice = new ResourceLocation(RefStrings.MODID, "textures/armor/wings_solstice.png");
+    //public static final ResourceLocation wings_solstice = new ResourceLocation(Tags.MODID, "textures/armor/wings_solstice.png");
     public static final ResourceLocation rpc_tex = new ResourceLocation(Tags.MODID, "textures/models/weapons/rpc.png");
     public static final ResourceLocation tom_main_tex = new ResourceLocation(Tags.MODID, "textures/models/explosion/tom_main.png");
     public static final ResourceLocation tom_flame_tex = new ResourceLocation(Tags.MODID, "textures/models/explosion/tom_flame.png");
