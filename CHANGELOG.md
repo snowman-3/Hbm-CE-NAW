@@ -52,6 +52,8 @@ diodes, pneumo tubes, ducts, and cables
 - Fixed keybind and sound issues around invalid overlap handling, the alternate copy-tool binding, looped sound pitch,
 and laser pistol/bobble sound registration
 - Fixed bedrock ore crumbs crystallizing with `Slop` instead of `Nitric Acid`
+- Hardened control panel save/load and editor flows so duplicated controls round-trip through serialized state, unresolved
+links are preserved, and missing controls are kept as placeholders instead of being discarded
 
 ### Changes
 - Assembly Factory now exposes truly separate recipe ports using position-aware slot access
@@ -87,6 +89,8 @@ doors (PR #1402 by Leafia)
 high-tier ammo
 - Added control panel addon instrument support, control duplication, and the new `Indicator Lamp (RGB)` instrument
 (PR #1407 by Leafia)
+- Added control panel redstone input/output nodes, including `redstone_input` events and weak/strong redstone emission
+from panels
 
 ### Performance
 - Added baked-quad caches for Combinator Funnel and Spotlight models

@@ -1,18 +1,16 @@
 package com.hbm.inventory.control_panel;
 
 import com.hbm.inventory.control_panel.controls.*;
-import com.hbm.util.Tuple.Pair;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class ControlRegistry {
 	
-	public static Map<String, Control> registry = new HashMap<>();
-	private static Map<Class<? extends Control>, String> classToName = new HashMap<>();
+	public static Map<String, Control> registry = new Object2ObjectLinkedOpenHashMap<>();
 
 	public static List<Control> addonControls = new ArrayList<>();
 
@@ -45,10 +43,6 @@ public class ControlRegistry {
 
 		for (Control control : addonControls)
 			registry.put(control.registryName,control);
-
-		for(Entry<String, Control> e : registry.entrySet()){
-			classToName.put(e.getValue().getClass(), e.getKey());
-		}
 	}
 	
 	public static List<Control> getAllControls(){
@@ -68,10 +62,11 @@ public class ControlRegistry {
 	}
 
 	public static Control getNew(String name, ControlPanel panel){
-		return registry.get(name).newControl(panel);
+		Control control = registry.get(name);
+		return control != null ? control.newControl(panel) : null;
 	}
 
-	public static String getName(Class<? extends Control> clazz){
-		return classToName.get(clazz);
+	public static boolean isRegistered(String name) {
+		return registry.containsKey(name);
 	}
 }
