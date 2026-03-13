@@ -13,10 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class RBMKControlBakedModel extends AbstractWavefrontBakedModel {
@@ -109,7 +106,7 @@ public class RBMKControlBakedModel extends AbstractWavefrontBakedModel {
         addPipes(quads, 4.0F);
 
         if (lidSprite != null) {
-            quads.addAll(bakeWavefrontAtYOffset(Collections.singletonList("Lid"), 3.0F, lidSprite));
+            quads.addAll(bakeWavefrontAtYOffset(Collections.singleton("Lid"), 3.0F, lidSprite));
         }
 
         return quads;
@@ -142,7 +139,7 @@ public class RBMKControlBakedModel extends AbstractWavefrontBakedModel {
         RBMKColumnBakedModel.addTexturedBox(quads, 0.5625F, yBase, 0.0625F, 0.9375F, yBase + 0.125F, 0.4375F, pipeTopSprite, pipeSideSprite, pipeTopSprite);
     }
 
-    private List<BakedQuad> bakeWavefrontAtYOffset(Collection<String> parts, float yOffsetBlocks, TextureAtlasSprite sprite) {
+    private List<BakedQuad> bakeWavefrontAtYOffset(Set<String> parts, float yOffsetBlocks, TextureAtlasSprite sprite) {
         float oldTy = this.ty;
         try {
             this.ty = oldTy + yOffsetBlocks;

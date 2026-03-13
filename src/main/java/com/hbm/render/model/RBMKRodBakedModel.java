@@ -98,8 +98,8 @@ public class RBMKRodBakedModel extends AbstractWavefrontBakedModel {
         };
 
         for (int i = 0; i < 4; i++) {
-            quads.addAll(bakeWavefrontAtYOffset(Collections.singletonList("Inner"), i, innerSprite));
-            quads.addAll(bakeWavefrontAtYOffset(Collections.singletonList("Cap"), i, capSprite));
+            quads.addAll(bakeWavefrontAtYOffset(Collections.singleton("Inner"), i, innerSprite));
+            quads.addAll(bakeWavefrontAtYOffset(Collections.singleton("Cap"), i, capSprite));
 
             Vector3f from = new Vector3f(0, i * 16.0f, 0);
             Vector3f to = new Vector3f(16.0f, (i + 1) * 16.0f, 16.0f);
@@ -118,8 +118,8 @@ public class RBMKRodBakedModel extends AbstractWavefrontBakedModel {
     private List<BakedQuad> buildNullSideQuads(int lidType) {
         List<BakedQuad> quads = new ArrayList<>();
 
-        quads.addAll(bakeSimpleQuads(Collections.singletonList("Inner"), 0, 0, 0, true, false, innerSprite));
-        quads.addAll(bakeSimpleQuads(Collections.singletonList("Cap"), 0, 0, 0, true, false, capSprite));
+        quads.addAll(bakeSimpleQuads(Collections.singleton("Inner"), 0, 0, 0, true, false, innerSprite));
+        quads.addAll(bakeSimpleQuads(Collections.singleton("Cap"), 0, 0, 0, true, false, capSprite));
 
         FaceBakery bakery = new FaceBakery();
         Vector3f from = new Vector3f(0, 0, 0);
@@ -147,7 +147,7 @@ public class RBMKRodBakedModel extends AbstractWavefrontBakedModel {
         return quads;
     }
 
-    private List<BakedQuad> bakeWavefrontAtYOffset(Collection<String> parts, float yOffsetBlocks, TextureAtlasSprite sprite) {
+    private List<BakedQuad> bakeWavefrontAtYOffset(Set<String> parts, float yOffsetBlocks, TextureAtlasSprite sprite) {
         float oldTy = this.ty;
         try {
             this.ty = oldTy + yOffsetBlocks;
