@@ -41,6 +41,11 @@ jobs:
         env:
           MAVEN_USER: ${{ secrets.MAVEN_USER }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          ARTIFACT_ID: ${{ vars.ARTIFACT_ID }}
         run: |
-          ./gradlew publish --no-daemon --stacktrace
+          ./gradlew \
+            publishMavenPublicationToMavenRepository \
+            publishMavenJava25PublicationToMavenRepository \
+            --parallel \
+            --max-workers=2 \
+            --no-daemon \
+            --stacktrace

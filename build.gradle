@@ -845,6 +845,7 @@ if (usesShadowedDependencies.toBoolean()) {
         manifest {
             attributes(getManifestAttributes())
         }
+        exclude 'module-info.class'
         // Only shadow classes that are actually used, if enabled
         if (minimizeShadowedDependencies.toBoolean()) {
             minimize()
@@ -865,10 +866,6 @@ if (usesShadowedDependencies.toBoolean()) {
     def publishedDevTask = enableModernJavaSyntax.toBoolean()
             ? tasks.named('shadeDowngradedApi', Jar)
             : tasks.named('shadowJar', ShadowJar)
-    configurations.runtimeElements.outgoing.artifacts.clear()
-    configurations.apiElements.outgoing.artifacts.clear()
-    configurations.runtimeElements.outgoing.artifact(publishedDevTask)
-    configurations.apiElements.outgoing.artifact(publishedDevTask)
     tasks.named('jar', Jar) {
         enabled = false
         finalizedBy(tasks.shadowJar)
@@ -1391,6 +1388,8 @@ if (customMavenPublishUrl) {
     afterEvaluate {
         String publishedVersion = modVersion
         String baseVersion = System.getenv('RELEASE_VERSION') ?: publishedVersion
+        String baseArtifactId = 'ntm-ce'
+        String baseGroupId = System.getenv('ARTIFACT_GROUP_ID') ?: project.mavenArtifactGroup
         def java25DevJarTask = tasks.named(usesShadowedDependencies.toBoolean() ? "shadowJarJava25" : "jarJava25")
         def java25ReobfJarTask = tasks.named("reobfJarJava25")
 
@@ -1402,17 +1401,30 @@ if (customMavenPublishUrl) {
 
                     if (apiPackage) {
                         artifact apiJar
-                        if (enableModernJavaSyntax.toBoolean()) {
+                    }
+
+                    groupId = baseGroupId
+                    artifactId = baseArtifactId
+                    version = baseVersion
+                }
+
+                if (enableModernJavaSyntax.toBoolean()) {
+                    create('mavenJava25', MavenPublication) {
+                        //noinspection GroovyAssignabilityCheck
+                        from components.findByName('java25')
+
+                        if (apiPackage) {
                             artifact apiJarJava25
                         }
-                    }
-                    artifact(java25DevJarTask)
-                    artifact(java25ReobfJarTask)
+                        if (!noPublishedSources.toBoolean()) {
+                            artifact sourcesJar
+                        }
+                        artifact(java25ReobfJarTask)
 
-                    // providers is not available here, use System for getting env vars
-                    groupId = System.getenv('ARTIFACT_GROUP_ID') ?: project.mavenArtifactGroup
-                    artifactId = System.getenv('ARTIFACT_ID') ?: project.modArchivesBaseName
-                    version = baseVersion
+                        groupId = baseGroupId
+                        artifactId = baseArtifactId + '-java25'
+                        version = baseVersion
+                    }
                 }
             }
 
@@ -1676,6 +1688,7 @@ if (usesShadowedDependencies.toBoolean()) {
         manifest {
             attributes(getManifestAttributes())
         }
+        exclude 'module-info.class'
 
         if (minimizeShadowedDependencies.toBoolean()) {
             minimize()
@@ -1709,6 +1722,96 @@ tasks.register('reobfJarJava25', ReobfuscatedJar) { t ->
 
     dependsOn(cleanroomInputTask)
 }
+
+def publishedRuntimeDevTask = enableModernJavaSyntax.toBoolean()
+        ? tasks.named(usesShadowedDependencies.toBoolean() ? 'shadeDowngradedApi' : 'jar', Jar)
+        : tasks.named(usesShadowedDependencies.toBoolean() ? 'shadowJar' : 'jar', Jar)
+def publishedApiDevTask = publishedRuntimeDevTask
+
+if (sourceSets.findByName('api') != null && !useSrcApiPath.toBoolean()) {
+    tasks.register('compileDevJar', Jar) {
+        group = 'build'
+        description = 'Packages the normal dev jar plus src/api output for compile-time consumers.'
+        destinationDirectory.set(layout.buildDirectory.dir("libs"))
+        archiveClassifier.set('dev-compile')
+        dependsOn(publishedRuntimeDevTask)
+        dependsOn(apiClasses)
+        from(provider {
+            zipTree(publishedRuntimeDevTask.get().archiveFile.get().asFile)
+        })
+        from(sourceSets.api.output)
+    }
+    publishedApiDevTask = tasks.named('compileDevJar', Jar)
+}
+
+if (enableModernJavaSyntax.toBoolean()) {
+    def publishedJava25RuntimeDevTask = tasks.register('publishJava25RuntimeJar', Jar) {
+        group = 'build'
+        description = 'Packages the Java 25 dev jar for the ntm-ce-java25 Maven publication.'
+        destinationDirectory.set(layout.buildDirectory.dir('publication-libs'))
+        archiveBaseName.set(project.modArchivesBaseName.toString() + '-java25-publish')
+        archiveClassifier.set('')
+        dependsOn(tasks.named(usesShadowedDependencies.toBoolean() ? 'shadowJarJava25' : 'jarJava25', Jar))
+        from(provider {
+            zipTree(tasks.named(usesShadowedDependencies.toBoolean() ? 'shadowJarJava25' : 'jarJava25', Jar).get().archiveFile.get().asFile)
+        })
+    }
+
+    def publishedJava25ApiDevTask = publishedJava25RuntimeDevTask
+    if (sourceSets.findByName('api') != null && !useSrcApiPath.toBoolean()) {
+        publishedJava25ApiDevTask = tasks.register('compileDevJarJava25', Jar) {
+            group = 'build'
+            description = 'Packages the Java 25 dev jar plus src/api output for compile-time consumers.'
+            destinationDirectory.set(layout.buildDirectory.dir('publication-libs'))
+            archiveBaseName.set(project.modArchivesBaseName.toString() + '-java25-publish')
+            archiveClassifier.set('dev-compile')
+            dependsOn(publishedJava25RuntimeDevTask)
+            dependsOn(apiClasses)
+            from(provider {
+                zipTree(publishedJava25RuntimeDevTask.get().archiveFile.get().asFile)
+            })
+            from(sourceSets.api.output)
+        }
+    }
+
+    def copyOutgoingAttributes = { fromCfg, toCfg ->
+        fromCfg.attributes.keySet().each { attr ->
+            toCfg.attributes.attribute(attr, fromCfg.attributes.getAttribute(attr))
+        }
+    }
+
+    def java25ApiElements = configurations.create('java25ApiElements') {
+        canBeConsumed = true
+        canBeResolved = false
+        visible = false
+        extendsFrom(configurations.apiElements)
+    }
+    def java25RuntimeElements = configurations.create('java25RuntimeElements') {
+        canBeConsumed = true
+        canBeResolved = false
+        visible = false
+        extendsFrom(configurations.runtimeElements)
+    }
+    copyOutgoingAttributes(configurations.apiElements, java25ApiElements)
+    copyOutgoingAttributes(configurations.runtimeElements, java25RuntimeElements)
+    java25ApiElements.outgoing.artifact(publishedJava25ApiDevTask)
+    java25RuntimeElements.outgoing.artifact(publishedJava25RuntimeDevTask)
+
+    def softwareComponentFactory = project.services.get(org.gradle.api.component.SoftwareComponentFactory)
+    def java25Component = softwareComponentFactory.adhoc('java25')
+    components.add(java25Component)
+    java25Component.addVariantsFromConfiguration(java25ApiElements) {
+        mapToMavenScope('compile')
+    }
+    java25Component.addVariantsFromConfiguration(java25RuntimeElements) {
+        mapToMavenScope('runtime')
+    }
+}
+
+configurations.runtimeElements.outgoing.artifacts.clear()
+configurations.apiElements.outgoing.artifacts.clear()
+configurations.runtimeElements.outgoing.artifact(publishedRuntimeDevTask)
+configurations.apiElements.outgoing.artifact(publishedApiDevTask)
 
 tasks.named('build').configure {
     dependsOn('reobfJarJava25')
