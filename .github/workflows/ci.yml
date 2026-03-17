@@ -63,18 +63,24 @@ jobs:
 
           for file in build/publication-libs/*.jar; do
             name=$(basename "$file")
-            case "$name" in
-              *-java25-publish-api.jar)
-                compat_name="${name%-java25-publish-api.jar}-api-java25.jar"
+            if [[ "$name" != *-java25-publish-* ]]; then
+              echo "::error::Unexpected publication artifact name: $name"
+              exit 1
+            fi
+
+            prefix="${name%%-java25-publish-*}"
+            rest="${name#*-java25-publish-}"
+
+            case "$rest" in
+              *-dev-compile.jar)
+                continue
                 ;;
-              *-java25-publish-dev-compile.jar)
-                compat_name="${name%-java25-publish-dev-compile.jar}-dev-compile-java25.jar"
+              *-api.jar)
+                continue
                 ;;
-              *-java25-publish.jar)
-                compat_name="${name%-java25-publish.jar}-java25.jar"
-                ;;
-              *)
-                compat_name="$name"
+              *.jar)
+                version="${rest%.jar}"
+                compat_name="${prefix}-${version}-java25.jar"
                 ;;
             esac
             cp "$file" "$OUT_DIR/$compat_name"
