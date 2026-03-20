@@ -154,6 +154,10 @@ public final class NTMImmediate {
 
     public void draw() {
         buffer.finishDrawing();
+        if (buffer.getVertexCount() <= 0) {
+            buffer.reset();
+            return;
+        }
         SpecializedUploader uploader = uploaders[fastBuffer().getFastFormat().ordinal()];
         if (uploader != null) {
             uploader.draw(buffer);
