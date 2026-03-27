@@ -25,6 +25,7 @@
 - Fixed RBMK Display facing/render
 - Fixed RBMK columns' extreme placing / removing lag due to improper quads caching
 - Mitigated duct and cable placing / removing lag due to eager net destruction and reconstruction
+- Fixed potential CME when switching door states
 
 ### Changes
 - JEI recipe lookup for `fluid_icon` items is now forwarded to their Forge fluid mirror
