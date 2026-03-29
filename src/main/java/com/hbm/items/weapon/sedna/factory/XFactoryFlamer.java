@@ -17,10 +17,10 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.helper.FlameCreator;
+import com.hbm.render.anim.sedna.AnimationEnums;
 import com.hbm.render.anim.sedna.BusAnimationKeyframeSedna.IType;
 import com.hbm.render.anim.sedna.BusAnimationSedna;
 import com.hbm.render.anim.sedna.BusAnimationSequenceSedna;
-import com.hbm.render.anim.sedna.HbmAnimationsSedna;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 import com.hbm.util.DamageResistanceHandler;
 import net.minecraft.block.Block;
@@ -145,7 +145,7 @@ public class XFactoryFlamer {
                         .setupStandardFire())
                 .setupStandardConfiguration()
                 .anim(LAMBDA_FLAMER_ANIMS).orchestra(Orchestras.ORCHESTRA_FLAMER)
-        );
+        ).setDefaultAmmo(GunFactory.EnumAmmo.FLAME_DIESEL, 1);
         ModItems.gun_flamer_topaz = new ItemGunBaseNT(ItemGunBaseNT.WeaponQuality.B_SIDE, "gun_flamer_topaz", new GunConfig()
                 .dura(20_000).draw(10).inspect(17).crosshair(Crosshair.L_CIRCLE)
                 .rec(new Receiver(0)
@@ -155,7 +155,7 @@ public class XFactoryFlamer {
                         .setupStandardFire())
                 .setupStandardConfiguration()
                 .anim(LAMBDA_FLAMER_ANIMS).orchestra(Orchestras.ORCHESTRA_FLAMER)
-        );
+        ).setDefaultAmmo(GunFactory.EnumAmmo.FLAME_DIESEL, 1);
         ModItems.gun_flamer_daybreaker = new ItemGunBaseNT(ItemGunBaseNT.WeaponQuality.LEGENDARY, "gun_flamer_daybreaker", new GunConfig()
                 .dura(20_000).draw(10).inspect(17).crosshair(Crosshair.L_CIRCLE)
                 .rec(new Receiver(0)
@@ -165,7 +165,7 @@ public class XFactoryFlamer {
                         .setupStandardFire())
                 .setupStandardConfiguration()
                 .anim(LAMBDA_FLAMER_ANIMS).orchestra(Orchestras.ORCHESTRA_FLAMER_DAYBREAKER)
-        );
+        ).setDefaultAmmo(GunFactory.EnumAmmo.FLAME_DIESEL, 1);
 
         ModItems.gun_chemthrower = new ItemGunChemthrower(ItemGunBaseNT.WeaponQuality.A_SIDE, "gun_chemthrower", new GunConfig()
                 .dura(90_000).draw(10).inspect(17).crosshair(Crosshair.L_CIRCLE).smoke(Lego.LAMBDA_STANDARD_SMOKE)
@@ -179,7 +179,7 @@ public class XFactoryFlamer {
         );
     }
 
-    @SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, HbmAnimationsSedna.GunAnimation, BusAnimationSedna> LAMBDA_FLAMER_ANIMS = (stack, type) -> {
+    @SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, AnimationEnums.GunAnimation, BusAnimationSedna> LAMBDA_FLAMER_ANIMS = (stack, type) -> {
         switch(type) {
             case EQUIP: return new BusAnimationSedna()
                     .addBus("EQUIP", new BusAnimationSequenceSedna().addPos(-45, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_DOWN));
@@ -192,7 +192,7 @@ public class XFactoryFlamer {
         return null;
     };
 
-    @SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, HbmAnimationsSedna.GunAnimation, BusAnimationSedna> LAMBDA_CHEMTHROWER_ANIMS = (stack, type) -> {
+    @SuppressWarnings("incomplete-switch") public static BiFunction<ItemStack, AnimationEnums.GunAnimation, BusAnimationSedna> LAMBDA_CHEMTHROWER_ANIMS = (stack, type) -> {
         switch(type) {
             case EQUIP: return new BusAnimationSedna()
                     .addBus("EQUIP", new BusAnimationSequenceSedna().addPos(-45, 0, 0, 0).addPos(0, 0, 0, 500, IType.SIN_DOWN));

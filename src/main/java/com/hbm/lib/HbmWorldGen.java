@@ -100,14 +100,14 @@ public class HbmWorldGen implements IWorldGenerator {
             if (rand.nextInt(64) == 0) {
                 NTMFlowers.INSTANCE_HEMP.generate(world, rand, new BlockPos(x, 0, z));
             }
-//			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.RIVER) && rand.nextInt(4) == 0) {
-//				DungeonToolbox.generateFlowers(world, rand, i, j, ModBlocks.reeds, 0);
-//			}
-//
-//			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH) && rand.nextInt(8) == 0) {
-//				DungeonToolbox.generateFlowers(world, rand, i, j, ModBlocks.reeds, 0);
-//			}
 
+			if (rand.nextInt(4) == 0) {
+                PlantReeds.RIVER.generate(world, rand, new BlockPos(x, 0, z));
+			}
+
+			if (rand.nextInt(8) == 0) {
+                PlantReeds.BEACH.generate(world, rand, new BlockPos(x, 0, z));
+			}
         }
     }
 
@@ -377,9 +377,6 @@ public class HbmWorldGen implements IWorldGenerator {
             }
             if (!biome.canRain() && biome.getDefaultTemperature() >= 2F) {
                 generateAStructure(world, rand, chunkMinX, chunkMinZ, DesertAtom001.INSTANCE, parseInt(CompatibilityConfig.atomStructure.get(dimID)));
-            }
-            if (biome.getDefaultTemperature() < 2F || biome.getDefaultTemperature() > 1.0F) {
-                generateAStructure(world, rand, chunkMinX, chunkMinZ, Relay.INSTANCE, parseInt(CompatibilityConfig.relayStructure.get(dimID)));
             }
             if (biome.getDefaultTemperature() > 1.8F) {
                 generateAStructure(world, rand, chunkMinX, chunkMinZ, Barrel.INSTANCE, parseInt(CompatibilityConfig.barrelStructure.get(dimID)));

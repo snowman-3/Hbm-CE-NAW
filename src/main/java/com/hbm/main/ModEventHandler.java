@@ -37,6 +37,7 @@ import com.hbm.items.IEquipReceiver;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.*;
 import com.hbm.items.food.ItemConserve;
+import com.hbm.items.machine.IItemFluidIdentifier;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.special.ItemHot;
 import com.hbm.items.tool.ItemDigammaDiagnostic;
@@ -155,7 +156,7 @@ public class ModEventHandler {
 
     public static final ResourceLocation ENT_HBM_PROP_ID = new ResourceLocation(Tags.MODID, "HBMLIVINGPROPS");
     public static final ResourceLocation DATA_LOC = new ResourceLocation(Tags.MODID, "HBMDATA");
-    public static final Int2IntOpenHashMap RBMK_COL_HEIGHT_MAP = new Int2IntOpenHashMap(); // server only, to avoid sending redundant packets
+    public static final Int2IntOpenHashMap RBMK_COL_HEIGHT_MAP = new Int2IntOpenHashMap(); // server only, stores raw dialColumnHeight values to avoid redundant packets
     public static Random rand = new Random();
     private static final ForkJoinPool THREAD_POOL = ForkJoinPool.commonPool();
 
@@ -527,7 +528,7 @@ public class ModEventHandler {
         Entity entity = event.getEntity();
         if(world.isRemote) return;
         if (entity instanceof EntityPlayerMP player) {
-            int height = RBMKDials.getColumnHeight(world);
+            int height = RBMKDials.getColumnHeightRuleValue(world);
             if (height != (int) RBMKDials.RBMKKeys.KEY_COLUMN_HEIGHT.defValue) {
                 PacketThreading.createSendToThreadedPacket(new SurveyPacket(height), player);
             }
@@ -544,6 +545,15 @@ public class ModEventHandler {
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         BlockPos pos = event.getPos();
         World world = event.getWorld();
+        EntityPlayer player = event.getEntityPlayer();
+
+        if (player.isSneaking()) {
+            ItemStack held = player.getHeldItem(event.getHand());
+            if (!held.isEmpty() && held.getItem() instanceof IItemFluidIdentifier) {
+                // Forge only allows sneak-activation when both hands bypass use; an offhand shield otherwise suppresses identifier interactions.
+                event.setUseBlock(Result.ALLOW);
+            }
+        }
 
         if(GeneralConfig.enable528ExplosiveEnergistics && !world.isRemote) {
             Block b = world.getBlockState(pos).getBlock();
@@ -652,7 +662,7 @@ public class ModEventHandler {
     @SubscribeEvent
     public void worldTick(WorldTickEvent event) {
         if (event.world == null || event.world.isRemote || event.phase != Phase.START) return;
-        int cur = RBMKDials.getColumnHeight(event.world);
+        int cur = RBMKDials.getColumnHeightRuleValue(event.world);
         int dim = event.world.provider.getDimension();
         if (RBMK_COL_HEIGHT_MAP.put(dim, cur) != cur) {
             //Drillgon200: Retarded hack because I'm not convinced game rules are client sync'd
@@ -1299,9 +1309,10 @@ public class ModEventHandler {
                 IHBMData props = HbmCapability.getData(player);
 
                 if(!props.hasReceivedBook()) {
-                    player.inventory.addItemStackToInventory(new ItemStack(ModItems.book_guide, 1, ItemGuideBook.BookType.STARTER.ordinal()));
-                    player.inventoryContainer.detectAndSendChanges();
-                    props.setReceivedBook(true);
+                    if(player.inventory.addItemStackToInventory(new ItemStack(ModItems.book_guide, 1, ItemGuideBook.BookType.STARTER.ordinal()))) {
+                        player.inventoryContainer.detectAndSendChanges();
+                        props.setReceivedBook(true);
+                    }
                 }
             }
 
@@ -1470,6 +1481,13 @@ public class ModEventHandler {
             if (!Library.hasInventoryItem(player.inventory, ModItems.beta))
                 player.inventory.addItemStackToInventory(new ItemStack(ModItems.beta));
         }
+    }
+
+    @SubscribeEvent//mlbv: had to use fqn here because clash with net.minecraftforge.fml.common.gameevent.PlayerEvent
+    public void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
+        IHBMData oldData = HbmCapability.getData(event.getOriginal());
+        IHBMData newData = HbmCapability.getData(event.getEntityPlayer());
+        newData.setReceivedBook(oldData.hasReceivedBook());
     }
 
     // TODO should probably use these.

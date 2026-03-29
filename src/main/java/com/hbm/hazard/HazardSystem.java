@@ -6,6 +6,7 @@ import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.config.ServerConfig;
+import com.hbm.core.HbmCorePlugin;
 import com.hbm.hazard.modifier.IHazardModifier;
 import com.hbm.hazard.transformer.IHazardTransformer;
 import com.hbm.hazard.type.IHazardType;
@@ -23,10 +24,12 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
@@ -118,7 +121,9 @@ public class HazardSystem {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         if (server == null) return CompletableFuture.completedFuture(null);
         tickCounter++;
-        if (tickCounter % RadiationConfig.hazardRate == 0) {
+        boolean hazardTick = tickCounter % RadiationConfig.hazardRate == 0;
+        boolean compatibilityMode = HbmCorePlugin.isInventoryTrackerHookDisabled();
+        if (hazardTick) {
             for (EntityPlayerMP player : server.getPlayerList().getPlayers()) {
                 if (player.isDead) continue;
                 PlayerHazardData phd = playerHazardDataMap.computeIfAbsent(player.getUniqueID(), uuid -> new PlayerHazardData(player));
@@ -132,19 +137,29 @@ public class HazardSystem {
         }
         CompletableFuture<Void> cur = scanFuture;
         if (!cur.isDone()) return cur;
-        if (playersToUpdate.isEmpty() && inventoryDeltas.isEmpty()) return CompletableFuture.completedFuture(null);
         final List<EntityPlayer> playersForFullScan = new ArrayList<>();
-        if (!playersToUpdate.isEmpty()) {
-            for (UUID uuid : playersToUpdate) {
-                EntityPlayer p = server.getPlayerList().getPlayerByUUID(uuid);
-                if (p != null && !p.isDead) playersForFullScan.add(p);
+        if (compatibilityMode) {
+            if (!hazardTick) return CompletableFuture.completedFuture(null);
+            for (EntityPlayerMP player : server.getPlayerList().getPlayers()) {
+                if (!player.isDead) playersForFullScan.add(player);
             }
             playersToUpdate.clear();
+        } else {
+            if (playersToUpdate.isEmpty() && inventoryDeltas.isEmpty()) return CompletableFuture.completedFuture(null);
+            if (!playersToUpdate.isEmpty()) {
+                for (UUID uuid : playersToUpdate) {
+                    EntityPlayer p = server.getPlayerList().getPlayerByUUID(uuid);
+                    if (p != null && !p.isDead) playersForFullScan.add(p);
+                }
+                playersToUpdate.clear();
+            }
         }
         final List<InventoryDelta> deltasForProcessing = new ArrayList<>();
         InventoryDelta delta;
         while ((delta = inventoryDeltas.poll()) != null) {
-            deltasForProcessing.add(delta);
+            if (!compatibilityMode) {
+                deltasForProcessing.add(delta);
+            }
         }
         if (playersForFullScan.isEmpty() && deltasForProcessing.isEmpty()) {
             return CompletableFuture.completedFuture(null);
@@ -354,7 +369,7 @@ public class HazardSystem {
      * @param data  hazard data to associate.
      */
     public static void register(final ItemStack stack, final HazardData data) {
-        stackMap.put(ItemStackUtil.comparableStackFrom(stack), data);
+        stackMap.put(ItemStackUtil.comparableStackFrom(stack).makeSingular(), data);
     }
 
     /**
@@ -459,7 +474,7 @@ public class HazardSystem {
      * @return {@code true} if a mapping was removed.
      */
     public static boolean unregister(final ItemStack stack) {
-        return stackMap.remove(ItemStackUtil.comparableStackFrom(stack)) != null;
+        return stackMap.remove(ItemStackUtil.comparableStackFrom(stack).makeSingular()) != null;
     }
 
     /**
@@ -524,17 +539,10 @@ public class HazardSystem {
         if (registry.containsKey(loc)) {
             Item item = registry.getValue(loc);
             if (item != null) {
-                removed |= itemMap.remove(item) != null;
+                removed = itemMap.remove(item) != null;
             }
         }
-        Iterator<Tuple<ResourceLocation, HazardData>> iterator = locationRateRegisterList.iterator();
-        while (iterator.hasNext()) {
-            Tuple<ResourceLocation, HazardData> tuple = iterator.next();
-            if (loc.equals(tuple.getFirst())) {
-                iterator.remove();
-                removed = true;
-            }
-        }
+        removed = removed || locationRateRegisterList.removeIf(tuple -> loc.equals(tuple.getFirst()));
         return removed;
     }
 
@@ -693,14 +701,7 @@ public class HazardSystem {
             return computeHazards(stack, compStack);
         }
 
-        int nbtHash = 0;
-        if (stack.hasTagCompound()) {
-            NBTTagCompound sanitizedNbt = stack.getTagCompound().copy();
-            sanitizedNbt.removeTag(NTM_NEUTRON_NBT_KEY);
-            if (!sanitizedNbt.isEmpty()) {
-                nbtHash = sanitizedNbt.hashCode();
-            }
-        }
+        int nbtHash = getSanitizedNbtHash(stack.getTagCompound());
 
         final NbtSensitiveCacheKey nbtKey = new NbtSensitiveCacheKey(compStack, nbtHash);
 
@@ -716,6 +717,27 @@ public class HazardSystem {
         } catch (ExecutionException e) {
             throw new RuntimeException("Error calculating hazard entries for stack: " + stack, e.getCause());
         }
+    }
+
+    private static int getSanitizedNbtHash(@Nullable NBTTagCompound tag) {
+        if (tag == null || tag.isEmpty()) {
+            return 0;
+        }
+        if (!tag.hasKey(NTM_NEUTRON_NBT_KEY)) {
+            return tag.hashCode();
+        }
+
+        int mapHash = 0;
+        boolean hasRemainingEntries = false;
+        for (String key : tag.getKeySet()) {
+            if (NTM_NEUTRON_NBT_KEY.equals(key)) {
+                continue;
+            }
+            NBTBase value = tag.getTag(key);
+            mapHash += key.hashCode() ^ value.hashCode();
+            hasRemainingEntries = true;
+        }
+        return hasRemainingEntries ? Constants.NBT.TAG_COMPOUND ^ mapHash : 0;
     }
 
     /**
@@ -777,7 +799,13 @@ public class HazardSystem {
      * @apiNote lookup count insensitive; result may be count-sensitive via modifiers
      */
     public static double getHazardLevelFromStack(ItemStack stack, IHazardType hazard) {
-        return getHazardsFromStack(stack).stream().filter(entry -> entry.type == hazard).findFirst().map(entry -> IHazardModifier.evalAllModifiers(stack, null, entry.baseLevel, entry.mods)).orElse(0D);
+        double totalLevel = 0.0;
+        for (HazardEntry entry : getHazardsFromStack(stack)) {
+            if (entry.type == hazard) {
+                totalLevel += IHazardModifier.evalAllModifiers(stack, null, entry.baseLevel, entry.mods);
+            }
+        }
+        return totalLevel;
     }
 
     public static double getRawRadsFromBlock(Block b) {
@@ -921,9 +949,11 @@ public class HazardSystem {
 
         void applyActiveHazards() {
             if (player.isDead) return;
+            boolean sync = false;
 
             if (!activeApplicators.isEmpty()) {
                 activeApplicators.values().forEach(applier -> applier.accept(this.player));
+                sync = true;
             }
             HbmLivingProps.setNeutron(player, 0);
 
@@ -940,12 +970,13 @@ public class HazardSystem {
                         float totalActivationAmount = (float) activationRate * RadiationConfig.hazardRate;
                         if (ContaminationUtil.neutronActivateInventory(player, totalActivationAmount, 1.0F)) {
                             schedulePlayerUpdate(this.player);
+                            sync = true;
                         }
                     }
                 }
             }
 
-            if (this.player.inventoryContainer != null) {
+            if (sync && this.player.inventoryContainer != null) {
                 this.player.inventoryContainer.detectAndSendChanges();
             }
         }

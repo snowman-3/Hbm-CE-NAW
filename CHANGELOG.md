@@ -4,52 +4,38 @@
 > - Style Guide  
 >   - For external contributors(those who do not have push access to this repo), always note the username and PR#xxxx in
 > brackets if applicable. e.g. Fixed some bug (PR #1234 by John Doe)  
+>   - For changelog updates, verify actual diffs instead of trusting commit subjects; summarize the net result as if the
+> changes were squashed into one commit. That is, fold follow-up fixes into the original feature/change entry where
+> appropriate, and omit anything that was fully reverted before release.
 >   - SUBSTANTIAL CHANGES are for changes that could substantially impact backward compatibility, e.g. fluid id
 > shifting. The major version number must be bumped.  
 >   - Breaking Changes are for casual breakages like the removal of a block(minor version bump), or a significant API
 > change(major API bump).  
 >   - Changes, New Features correspond to a minor bump.  
 >   - Fixes/Performance/Misc correspond to a minor or patch bump.
-> - Previous public release: 2.1.1.0
+> - Previous public release: 2.2.0.0
+> - Next release: at least 2.2.1.0
 
 ### SUBSTANTIAL CHANGES
 
 ### Breaking Changes
-- Removed legacy `machine_assembler`, `machine_assemfac`, `machine_chemplant`, and `machine_chemfac`, plus their legacy
-templates/JEI/category/render assets
 
 ### Fixes
-- Fixed gas centrifuge fluid rendering in GUI tanks
-- Fixed chlorine/mist/chemical effects being applied to creative or spectator players
-- Fixed fence connections for yellow barrels, storage drums, and tape recorders
-- Fixed missing "too far" chat warning while linking pylons
-- Fixed beam/door pathfinding crashes by returning non-null empty AABBs
-- Fixed a possible concurrent modification while firing powered drills
-- Fixed artillery turrets not clearing invalid/dead entity targets
-- Fixed Assembly Factory upgrade info showing the Chemical Factory label
-- Fixed scraps model registration conflict (#1158)
-- Fixed precision/rounding drift in power and fluid network distribution
-- Fixed simulation side effects in power transfer paths (REDD, charger, capacitor, cable diode)
-- Fixed siren track indexing/model registration
-- Fixed `ore_oil` being unbreakable
-- Fixed MHD Turbine and Boiler missing Forge capability compatibility
-- Fixed some latent misuse issues of Vec3d methods
-- Fixed Multi Fluid ID not working when another item is held off-hand
-- Fixed Industrial Turbine not having any sound
+- Fixed impact overworld provider rebinding clashing with OTG / other mods' custom provider
+- Fixed RBMK Display facing/render
+- Fixed RBMK columns' extreme placing / removing lag due to improper quads caching
+- Mitigated duct and cable placing / removing lag due to eager net destruction and reconstruction
+- Fixed potential CME when switching door states
 
 ### Changes
-- Assembly Factory now exposes truly separate recipe ports using position-aware slot access
-- Starter kit now provides new assembly/chemical machine variants instead of removed legacy ones
-- Template folder now focuses on crucible templates after removing legacy assembly/chem templates
-- Reworked Conveyor blocks to match upstream behavior
+- JEI recipe lookup for `fluid_icon` items is now forwarded to their Forge fluid mirror
 
 ### New Features
-- Ported colored scaffold variants and their dynamic baked model
-- Added OpenComputers callbacks for artillery turrets, including manual coordinate queueing
-- Ported plushies with per-type models, sounds, and squish animation
-- Added fake HE/RF converters (PR #1396 by Leafia)
 
 ### Performance
-- Added baked-quad caches for Combinator Funnel and Spotlight models
+- Moved Tau/Vortex particles, chemical projectiles, black-hole effects, and RBMK console/display overlays onto
+`NTMImmediate` / fast-buffer rendering paths, reducing legacy Tessellator overhead and aligning them with the newer
+client rendering utilities
+- Reworked rebar concrete-fill rendering into a dedicated client renderer. The render-limit client config is removed.
 
 ### Misc

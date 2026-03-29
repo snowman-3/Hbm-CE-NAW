@@ -176,7 +176,7 @@ public class FluidDuctStandard extends FluidDuctBase implements IDynamicModels, 
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxForPlacement(World worldIn, BlockPos pos, ItemStack stack) {
+    public AxisAlignedBB getCollisionBoundingBoxForPlacement(World worldIn, BlockPos pos, IBlockState stateForPlacement, ItemStack stack) {
         return getCollisionAABB(worldIn, pos, Fluids.NONE);
     }
 
@@ -327,12 +327,6 @@ public class FluidDuctStandard extends FluidDuctBase implements IDynamicModels, 
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		int meta = stack.getMetadata() % 3;
-		worldIn.setBlockState(pos, this.getDefaultState().withProperty(META, meta), 2);
-	}
-
-	@Override
 	public int damageDropped(IBlockState state) {
 		return state.getValue(META);
 	}
@@ -444,5 +438,13 @@ public class FluidDuctStandard extends FluidDuctBase implements IDynamicModels, 
 			return type.getColor();
 		};
 		evt.getBlockColors().registerBlockColorHandler(colorHandler, ModBlocks.fluid_duct_neo); // ensure ModBlocks.fluid_duct refers to this block
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void registerItemColorHandler(ColorHandlerEvent.Item evt) {
+		evt.getItemColors().registerItemColorHandler(
+				(stack, tintIndex) -> tintIndex == 1 ? Fluids.NONE.getColor() : 0xFFFFFF,
+				Item.getItemFromBlock(ModBlocks.fluid_duct_neo)
+		);
 	}
 }

@@ -12,12 +12,9 @@ import com.hbm.blocks.generic.BlockBedrockOreTE;
 import com.hbm.config.ClientConfig;
 import com.hbm.handler.HbmKeybinds;
 import com.hbm.handler.ability.*;
-import com.hbm.inventory.gui.GUIScreenToolAbility;
 import com.hbm.interfaces.IItemHUD;
-import com.hbm.items.IDynamicModels;
-import com.hbm.items.IItemControlReceiver;
-import com.hbm.items.IKeybindReceiver;
-import com.hbm.items.ModItems;
+import com.hbm.inventory.gui.GUIScreenToolAbility;
+import com.hbm.items.*;
 import com.hbm.lib.internal.MethodHandleHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
@@ -78,7 +75,7 @@ import java.util.*;
 
 import static com.hbm.items.ItemEnumMulti.ROOT_PATH;
 
-public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIProvider, IItemControlReceiver, IKeybindReceiver, IItemHUD, IDynamicModels {
+public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIProvider, IItemControlReceiver, IKeybindReceiver, IItemHUD, IDynamicModels, IClaimedModelLocation {
 
 	protected boolean isShears = false;
 
@@ -144,6 +141,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 		this.texturePath = s;
 		INSTANCES.add(this);
 		ModItems.ALL_ITEMS.add(this);
+        ClaimedModelLocationRegistry.register(this);
 	}
 
 	@Override
@@ -175,6 +173,12 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 	@Override
 	public void registerSprite(TextureMap map) {
 		map.registerSprite(new ResourceLocation(Tags.MODID, ROOT_PATH + texturePath));
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean ownsModelLocation(ModelResourceLocation location) {
+		return IClaimedModelLocation.isInventoryLocation(location, new ResourceLocation(Tags.MODID, ROOT_PATH + texturePath));
 	}
 
 	public ItemToolAbility addAbility(IBaseAbility ability, int level) {
@@ -657,10 +661,18 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 		GlStateManager.pushMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(GUIScreenToolAbility.texture);
 		GlStateManager.enableBlend();
+		GlStateManager.disableLighting();
+		GlStateManager.disableDepth();
+		GlStateManager.depthMask(false);
+		GlStateManager.color(1F, 1F, 1F, 1F);
+
 		OpenGlHelper.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR, 1, 0);
 		gui.drawTexturedModalRect(event.getResolution().getScaledWidth() / 2 - size - 8 + ox, event.getResolution().getScaledHeight() / 2 + 8 + oy, uv.key, uv.value, size, size);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		GlStateManager.disableBlend();
+		GlStateManager.enableDepth();
+		GlStateManager.depthMask(true);
+		GlStateManager.color(1F, 1F, 1F, 1F);
 		GlStateManager.popMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
 	}
