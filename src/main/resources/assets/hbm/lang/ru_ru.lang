@@ -8070,6 +8070,13 @@ tile.wood_structure.roof.name=Деревянное перекрытие
 tile.wood_structure.scaffold.name=Деревянные подмостки
 tile.yellow_barrel.name=Радиоактивная бочка
 tile.zirnox_destroyed.name=Разрушенный Цирнокс
+//RAK KOZEL
+tile.complexwalla.name=Стена комплекса А
+tile.complexwallb.name=Стена комплекса В
+tile.complexwallc.name=Стена комплекса С
+tile.complexwalld.name=Стена комплекса Д
+tile.complexwalle.name=Стена комплекса Е
+//RAK KOZEL
 tipped_arrow.effect.potion.hbm_bang=Стрела ! ! !
 tipped_arrow.effect.potion.hbm_lead=Стрела отравления свинцом
 tipped_arrow.effect.potion.hbm_mutation=Стрела гулификации

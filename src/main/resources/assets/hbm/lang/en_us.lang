@@ -8071,6 +8071,13 @@ tile.wood_structure.roof.name=Wooden Roof
 tile.wood_structure.scaffold.name=Wooden Scaffold
 tile.yellow_barrel.name=Radioactive Barrel
 tile.zirnox_destroyed.name=Destroyed ZIRNOX
+//RAK KOZEL
+tile.complexwalla.name=Complex Wall A
+tile.complexwallb.name=Complex Wall B
+tile.complexwallc.name=Complex Wall C
+tile.complexwalld.name=Complex Wall D
+tile.complexwalle.name=Complex Wall E
+//RAK KOZEL
 tipped_arrow.effect.potion.hbm_bang=Arrow of ! ! !
 tipped_arrow.effect.potion.hbm_lead=Arrow of Lead Poisoning
 tipped_arrow.effect.potion.hbm_mutation=Arrow of Ghoulification

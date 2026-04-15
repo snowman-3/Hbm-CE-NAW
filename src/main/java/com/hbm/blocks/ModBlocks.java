@@ -116,6 +116,15 @@ public class ModBlocks {
     public static final Block tile_lab_cracked = new BlockClean(Material.ROCK, "tile_lab_cracked").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F);
     public static final Block tile_lab_broken = new BlockOutgas(true, 40, true, "tile_lab_broken").setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F);
 
+    //RAK STAFF
+
+    //public static final Block complexwalla = new BlockRadResistant(Material.ROCK, "complexwalla").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(160.0F);
+    //public static final Block complexwallb = new BlockRadResistant(Material.ROCK, "complexwallb").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(160.0F);
+    //public static final Block complexwallc = new BlockRadResistant(Material.ROCK, "complexwallc").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(160.0F);
+    //public static final Block complexwalld = new BlockRadResistant(Material.ROCK, "complexwalld").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(160.0F);
+    //public static final Block complexwalle = new BlockRadResistant(Material.ROCK, "complexwalle").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(160.0F);
+    public static final Block complexwall = new BlockBase(Material.ROCK, "complexwall").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+
     //stairs
     public static final Block reinforced_stone_stairs = new BlockGenericStairs(reinforced_stone, "reinforced_stone_stairs", "reinforced_stone", 0).setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(76.0F);
     public static final Block brick_concrete_stairs = new BlockGenericStairs(brick_concrete, "brick_concrete_stairs", "brick_concrete", 0).setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(95.0F);
